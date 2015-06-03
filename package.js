@@ -16,16 +16,21 @@ Package.onTest(function(api) {
 });
 
 function configure(api) {
+  api.export(['KadiraDebug']);
+
   api.versionsFrom('1.0');
   api.use('blaze');
   api.use('templating');
   api.use('underscore');
+  api.use('random');
+  api.use('session');
   api.use('meteorhacks:flow-router@1.9.0', {weak:true});
   api.use('iron:router@1.0.0', {weak:true});
 
   api.addFiles('lib/client/store.js', 'client');
   api.addFiles('lib/client/routing.js', 'client');
   api.addFiles('lib/client/blaze.js', 'client');
+  api.addFiles('lib/client/connect.js', 'client');
 
   api.addFiles('lib/server/methods.js', 'server');
 }
