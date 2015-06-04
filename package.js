@@ -31,6 +31,7 @@ function configure(api) {
   api.addFiles('lib/client/providers/blaze.js', 'client');
   api.addFiles('lib/client/providers/flow_router.js', 'client');
   api.addFiles('lib/client/providers/iron_router.js', 'client');
+  api.addFiles('lib/client/providers/ddp.js', 'client');
   api.addFiles('lib/client/connect.js', 'client');
 
   api.addFiles('lib/server/connect.js', 'server');
