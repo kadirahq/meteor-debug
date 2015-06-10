@@ -27,7 +27,7 @@ Now, you'll be able to see what's happening in your app as you interact with you
 
 If you like to learn more about the Kadira Debug UI and how to interpret it, watch following video:
 
-...
+[![](https://cldup.com/eDEvWF2VMT.png)](https://www.youtube.com/watch?v=lrAYlayAWMI)
 
 ## FAQ
 
