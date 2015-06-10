@@ -51,6 +51,9 @@ Yes and No. Checkout this repo. It's the core of Kadira Debug and how we collect
 
 Yes it is. We'll never block/restrict any debug related features. But, we'll add few value added services like sharing and remote debugging.
 
+#### I don't have a Kadira Account
+You don't need to have a Kadira or Meteor Account to use Kadira Debug. But, you should try to create an account :)
+
 #### Will it support React?
 
 React is becoming the standard for UI components. Meteor is supporting it officially soon. So, it's a shame we wouldn't support it.
