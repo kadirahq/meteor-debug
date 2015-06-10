@@ -33,7 +33,7 @@ If you like to learn more about the Kadira Debug UI and how to interpret it, wat
 
 #### How does it work?
 
-Kadira Debug web app directly connect to your locally running app via DDP. Then it can collect data from both your server and the browser and display in a nice interface. If you like to learn more, why don't you hack this repo :)
+Kadira Debug UI directly connects to your locally running app via DDP. Then it can collect data from both your server and the browser and display in a nice interface. If you like to learn more, why don't you hack this repo :)
 
 #### Does it affect the performance of my app?
 
@@ -41,20 +41,20 @@ Not necessarily. Kadira Debug collect, aggregate and send data in an effective w
 
 #### Is it secure?
 
-Kadira debug is a `debugOnly` package. So, it won't goes into the production build. It also does not send or route data outside of your machine. Kadira Debug UI is directly connects to your app via DDP; no proxies or hacks.
+Kadira Debug is a `debugOnly` package. So, it won't goes into the production build. It also does not send or route data outside of your machine. Kadira Debug UI directly connects to your app via DDP. No proxies; No hacks.
 
 #### Is it Open Source?
 
-Yes and No. Check this repo. It's the core of Kadira Debug and how we collect data. It's Open Source under MIT. But, our Kadira Debug UI is not open source.
+Yes and No. Checkout this repo. It's the core of Kadira Debug and how we collect data. It's Open Source under MIT. But, our Kadira Debug UI is not open source.
 
 #### Is it FREE?
 
-Yes it is. We'll never charge/block any debug related features. But, we'll add few value added services like sharing and remote debugging.
+Yes it is. We'll never block/restrict any debug related features. But, we'll add few value added services like sharing and remote debugging.
 
 #### Will it support React?
 
-React is becoming the de-facto standard for UI components. Meteor is supporting it soon officially. So, we'll support it soon.
+React is becoming the standard for UI components. Meteor is supporting it officially soon. So, it's a shame we wouldn't support it.
 
 #### I've a different question?
 
-Submit an issue on this repo. If you need to send us a private message send it to `support@kadira.io`.
+Submit an issue on this repo. If you need to send us a private message, send it to `support@kadira.io`.
