@@ -19,7 +19,7 @@ meteor add meteorhacks:kadira-debug
 
 * Then run your app. (Let's assume your app runs on port 3000)
 * After that, visit <http://new.kadira.io/debug>
-* Then connect to `http://localhost:3000`
+* Then connect to `http://localhost:3000` from the Kadira Debug UI
 
 Now, you'll be able to see what's happening in your app as you interact with your app.
 
