@@ -4,9 +4,9 @@ Full Stack Debugging Solution for Meteor
 
 ![Kadira Debug - Full Stack Debugging Solution for Meteor](https://cldup.com/pQDQPc4rjT.png)
 
-Kadira Debug helps you to identify what's happening behind your Meteor app including both client and the server. Based on that information, you can improve the performance of your app and make it faster.
+Kadira Debug **helps** you to identify what's happening behind your Meteor app including both **client** and the **server** code. Based on that information, you can **improve** the performance of your app and make it **faster**.
 
-It'll also helps you to figure out hard to debug UI issues.
+It'll also helps you to **fix** hard to debug UI issues.
 
 ## Getting Started
 
@@ -25,7 +25,7 @@ Now, you'll be able to see what's happening in your app as you interact with you
 
 ---
 
-If you like to learn more about the Kadira Debug interface and how to interpret it, watch following video:
+If you like to learn more about the Kadira Debug UI and how to interpret it, watch following video:
 
 ...
 
@@ -39,7 +39,7 @@ Kadira Debug web app directly connect to your locally running app via DDP. Then 
 
 Not necessarily. Kadira Debug collect, aggregate and send data in an effective way. So, it won't add any noticeable overhead to your app. If it does, open an issue. We'd love to fix it.
 
-#### Does it secure?
+#### Is it secure?
 
 Kadira debug is a `debugOnly` package. So, it won't goes into the production build. It also does not send or route data outside of your machine. Kadira Debug UI is directly connects to your app via DDP; no proxies or hacks.
 
