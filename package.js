@@ -27,7 +27,7 @@ function configure(api) {
   api.use('reload');
   api.use('mongo');
   api.use('tracker');
-  api.use('meteorhacks:flow-router@0.0.16', {weak:true});
+  api.use('meteorhacks:flow-router@0.0.16 || 1.0.0', {weak:true});
   api.use('iron:router@1.0.0', {weak:true});
 
   api.addFiles('lib/client/store.js', 'client');
