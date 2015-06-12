@@ -2,7 +2,7 @@ Tinytest.addAsync(
 'Store - trackEvent', 
 function(test, done) {
   var s = GetStore();
-  var type = "__type";
+  var type = '__type';
   var info = {aa: 10};
   s.trackEvent(type, info);
 
@@ -17,7 +17,7 @@ Tinytest.addAsync(
 'Store - trackEvent with custom startTime', 
 function(test, done) {
   var s = GetStore();
-  var type = "__type";
+  var type = '__type';
   var info = {aa: 10};
   var time = 10;
   s.trackEvent(type, info, time);
@@ -32,37 +32,116 @@ function(test, done) {
 Tinytest.addAsync(
 'Store - trackActivity', 
 function(test, done) {
+  var s = GetStore();
+  var type = '__type';
+  var name = '__name';
+  var key = type + "::" + name;
+  var completed = s.trackActivity(type, name);
+  setTimeout(function() {
+    completed();
+    var activity = s.currentDataBlock.activities[key];
+    test.equal(_.pick(activity, 'type', 'name', 'count'), {
+      type: type,
+      name: name,
+      count: 1
+    });;
+
+    test.isTrue(activity.elapsedTime >= 100);
+    done();
+  }, 100);
+
+});
+
+Tinytest.addAsync(
+'Store - trackActivity with multiple occurences', 
+function(test, done) {
+  var s = GetStore();
+  var type = '__type';
+  var name = '__name';
+  var key = type + "::" + name;
+  var completed = s.trackActivity(type, name);
+  setTimeout(function() {
+    completed();
+    completed = s.trackActivity(type, name);
+    setTimeout(function() {
+      completed();
+      var activity = s.currentDataBlock.activities[key];
+      test.equal(_.pick(activity, 'type', 'name', 'count'), {
+        type: type,
+        name: name,
+        count: 2
+      });;
+
+      test.isTrue(activity.elapsedTime >= 200);
+      done();
+    }, 100);
+  }, 100);
 
 });
 
 Tinytest.addAsync(
 'Store - startup - before start', 
 function(test, done) {
-
+  var s = GetStore();
+  s.startup(done);
+  s.start('bid', 'cid');
+  s.stop();
 });
 
 Tinytest.addAsync(
 'Store - startup - after start', 
 function(test, done) {
-
+  var s = GetStore();
+  s.start('bid', 'cid');
+  s.startup(done);
+  s.stop();
 });
 
 Tinytest.addAsync(
-'Store - _pushToServer - track and stop', 
+'Store - send data to server - track and stop', 
 function(test, done) {
+  var s = new Store({serverPushInterval: 10});
+  var clientId = 'cid';
+  var browserId = 'bid';
+  s.start(browserId, clientId);
 
+  var originalCall = Meteor.call;
+  Meteor.call = sinon.stub();
+
+  s.trackEvent('type', {info: true});
+
+  setTimeout(function() {
+    test.equal(Meteor.call.callCount, 1);
+    var args = Meteor.call.args[0];
+    var block = args[3];
+    test.equal(args[0], 'kadira.debug.updateTimeline');
+    test.equal(args[1], browserId);
+    test.equal(args[2], clientId);
+    test.equal(block.events[0][1], 'type');
+    test.equal(block.events[0][2], {info: true});
+    s.stop();
+    Meteor.call = originalCall;
+    done();
+  }, 100);
 });
 
 Tinytest.addAsync(
-'Store - _pushToServer - without data', 
+'Store - send data to server - without data', 
 function(test, done) {
+  var s = new Store({serverPushInterval: 10});
+  var clientId = 'cid';
+  var browserId = 'bid';
+  s.start(browserId, clientId);
 
-});
+  var originalCall = Meteor.call;
+  Meteor.call = sinon.stub();
 
-Tinytest.addAsync(
-'Store - Integration - start and track', 
-function(test, done) {
-
+  setTimeout(function() {
+    test.equal(Meteor.call.callCount, 0);
+    s.stop();
+    Meteor.call = originalCall;
+    done();
+  }, 100);
 });
 
 function GetStore() {
@@ -70,7 +149,7 @@ function GetStore() {
 
   // this is to identify we've started 
   // this is just for testing
-  s._clientId = "some-id";
+  s._clientId = 'some-id';
   s.currentDataBlock = s._buildDataBlock();
 
   return s;
