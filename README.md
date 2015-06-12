@@ -49,7 +49,7 @@ Did you notice we are using a different domain for Kadira Debug. Here is it: `ht
 
 Browsers restrict HTTPS web pages to access non-https content. So, if we served Kadira Debug on a `*.kadira.io` domain with HTTPS, we can't connect to localhost. That's why we are using a seperate domain without HTTPS.
 
-**This is secure since we don't communicate with Kadira Servers inside Kadira Debug. Even if we do, we'll use some other techniques to make sure DDP connection is always secure**
+**This is secure since we don't communicate with Kadira Servers inside Kadira Debug. Even if we do, we'll use some other techniques to make sure DDP connection is always secure.**
 
 #### Is it Open Source?
 
