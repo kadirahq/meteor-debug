@@ -18,7 +18,7 @@ meteor add meteorhacks:kadira-debug
 
 
 * Then run your app. (Let's assume your app runs on port 3000)
-* After that, visit <http://new.kadira.io/debug>
+* After that, visit <http://debug.kadiraio.com/debug>
 * Then connect to `http://localhost:3000` from the Kadira Debug UI
 
 Now, you'll be able to see what's happening in your app as you interact with your app.
@@ -42,6 +42,14 @@ Not necessarily. Kadira Debug collect, aggregate and send data in an effective w
 #### Is it secure?
 
 Kadira Debug is a `debugOnly` package. So, it won't goes into the production build. It also does not send or route data outside of your machine. Kadira Debug UI directly connects to your app via DDP. No proxies; No hacks.
+
+#### Why it's not HTTPS?
+
+Did you notice we are using a different domain for Kadira Debug. Here is it: `http://debug.kadiraio.com/debug`. That's because of a security feature of modern browsers. 
+
+Browsers restrict HTTPS web pages to access non-https content. So, if we served Kadira Debug on a `*.kadira.io` domain with HTTPS, we can't connect to localhost. That's why we are using a seperate domain without HTTPS.
+
+**This is secure since we don't communicate with Kadira Servers inside Kadira Debug. Even if we do, we'll use some other techniques to make sure DDP connection is always secure**
 
 #### Is it Open Source?
 
