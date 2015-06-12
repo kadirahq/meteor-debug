@@ -13,6 +13,8 @@ Package.onUse(function (api) {
 Package.onTest(function(api) {
   configure(api);
   api.use('tinytest');
+
+  api.addFiles('tests/client/store.js', 'client');
 });
 
 function configure(api) {
@@ -27,6 +29,7 @@ function configure(api) {
   api.use('reload');
   api.use('mongo');
   api.use('tracker');
+  api.use('localstorage');
   api.use('meteorhacks:flow-router@0.0.16 || 1.0.0', {weak:true});
   api.use('iron:router@1.0.0', {weak:true});
 
