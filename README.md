@@ -1,4 +1,4 @@
-# Kadira Debug
+# Kadira Debug [![Build Status](https://travis-ci.org/meteorhacks/kadira-debug.svg?branch=master)](https://travis-ci.org/meteorhacks/kadira-debug)
 
 Full Stack Debugging Solution for Meteor
 
