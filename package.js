@@ -14,7 +14,9 @@ Package.onTest(function(api) {
   configure(api);
   api.use('tinytest');
   api.use('practicalmeteor:sinon@1.14.1_1');
+  
   api.addFiles('tests/client/store.js', 'client');
+  api.addFiles('tests/server/integration.js', 'server');
 });
 
 function configure(api) {
