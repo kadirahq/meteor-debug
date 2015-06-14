@@ -1,5 +1,9 @@
 # Change Log
 
+#### v1.2.0
+* Track live updates in a very efficient way. For now, we only track the count and collection only. We don't track fields yet.
+* Fixed an issue with our use of time to send data.
+
 #### v1.1.0
 * Add a set of testing covering almost all of the code base
 
