@@ -1,5 +1,8 @@
 # Change Log
 
+#### v1.3.0
+* Use the actual browser name as the browseId. For this we parse, the userAgent. But, we don't parse it on the client. Instead, we do it on the server. By doing that, we don't need to send some additional code to the client. (ua-parser code)
+
 #### v1.2.0
 * Track live updates in a very efficient way. For now, we only track the count and collection only. We don't track fields yet.
 * Fixed an issue with our use of time to send data.
