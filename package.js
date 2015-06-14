@@ -6,6 +6,10 @@ Package.describe({
   debugOnly: true
 });
 
+Npm.depends({
+  'ua-parser-js': '0.7.7'
+});
+
 Package.onUse(function (api) {
   configure(api);
 });
