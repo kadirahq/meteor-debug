@@ -1,12 +1,36 @@
 Tinytest.addAsync(
+'Store - _getCurrentDataBlock - for new time', 
+function(test, done) {
+  var s = GetStore();
+  var time = 1024;
+  var block = s._getCurrentDataBlock(time);
+  test.equal(s.currentDataBlocks["1000"], block);
+  done();
+});
+
+Tinytest.addAsync(
+'Store - _getCurrentDataBlock - for old time', 
+function(test, done) {
+  var s = GetStore();
+  var time = 1024;
+  s._getCurrentDataBlock(time);
+
+  var time2 = 1057;
+  var block = s._getCurrentDataBlock(time2);
+  test.equal(s.currentDataBlocks["1000"], block);
+  done();
+});
+
+Tinytest.addAsync(
 'Store - trackEvent', 
 function(test, done) {
   var s = GetStore();
   var type = '__type';
   var info = {aa: 10};
+  var trackTime = Date.now();
   s.trackEvent(type, info);
 
-  var event = s.currentDataBlock.events[0];
+  var event = s._getCurrentDataBlock(trackTime).events[0];
   test.equal(event[1], type);
   test.equal(event[2], info);
   test.isTrue(event[0] <= Date.now());
@@ -22,7 +46,7 @@ function(test, done) {
   var time = 10;
   s.trackEvent(type, info, time);
 
-  var event = s.currentDataBlock.events[0];
+  var event = s._getCurrentDataBlock(time).events[0];
   test.equal(event[1], type);
   test.equal(event[2], info);
   test.equal(event[0], time);
@@ -36,10 +60,12 @@ function(test, done) {
   var type = '__type';
   var name = '__name';
   var key = type + "::" + name;
+  var trackTime = Date.now();
   var completed = s.trackActivity(type, name);
+
   setTimeout(function() {
     completed();
-    var activity = s.currentDataBlock.activities[key];
+    var activity = s._getCurrentDataBlock(trackTime).activities[key];
     test.equal(_.pick(activity, 'type', 'name', 'count'), {
       type: type,
       name: name,
@@ -59,24 +85,25 @@ function(test, done) {
   var type = '__type';
   var name = '__name';
   var key = type + "::" + name;
+  var trackTime = Date.now();
   var completed = s.trackActivity(type, name);
+
   setTimeout(function() {
     completed();
     completed = s.trackActivity(type, name);
     setTimeout(function() {
       completed();
-      var activity = s.currentDataBlock.activities[key];
+      var activity = s._getCurrentDataBlock(trackTime).activities[key];
       test.equal(_.pick(activity, 'type', 'name', 'count'), {
         type: type,
         name: name,
         count: 2
       });;
 
-      test.isTrue(activity.elapsedTime >= 200);
+      test.isTrue(activity.elapsedTime >= 20);
       done();
-    }, 100);
-  }, 100);
-
+    }, 10);
+  }, 10);
 });
 
 Tinytest.addAsync(
@@ -142,6 +169,25 @@ function(test, done) {
     Meteor.call = originalCall;
     done();
   }, 100);
+});
+
+Tinytest.addAsync(
+'Store - send data to server - run beforePush callbacks', 
+function(test, done) {
+  var s = new Store({serverPushInterval: 10});
+  var clientId = 'cid';
+  var browserId = 'bid';
+  s.start(browserId, clientId);
+
+  var originalCall = Meteor.call;
+  Meteor.call = sinon.stub();
+
+  s.beforePush(function() {
+    s.stop();
+    Meteor.call = originalCall;
+    done();
+  });
+  s.trackEvent('type', {info: true});
 });
 
 function GetStore() {

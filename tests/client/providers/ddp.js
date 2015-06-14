@@ -15,6 +15,89 @@ function(test, done) {
 });
 
 Tinytest.addAsync(
+'Client - DDPProvider - incoming - added messages - tracked with other message', 
+function(test, done) {
+  var stub = StartStubbing(StoreManager, 'trackEvent');
+  var caller = DDPProvider._livedata_data(function() {});
+
+  caller({msg: 'added', collection: 'coll1'});
+  caller({msg: 'added', collection: 'coll1'});
+  caller({msg: 'some-other'});
+  test.equal(stub.args[0][0], 'live-updates');
+  test.equal(_.pick(stub.args[0][1], 'collection', 'count', 'type'), {
+    collection: 'coll1',
+    type: 'added',
+    count: 2
+  });
+  test.equal(stub.callCount, 1);
+  stub.stop();
+  done();
+});
+
+Tinytest.addAsync(
+'Client - DDPProvider - incoming - added messages - tracked with diff type', 
+function(test, done) {
+  var stub = StartStubbing(StoreManager, 'trackEvent');
+  var caller = DDPProvider._livedata_data(function() {});
+
+  caller({msg: 'added', collection: 'coll1'});
+  caller({msg: 'added', collection: 'coll1'});
+  caller({msg: 'changed', collection: 'coll1'});
+  test.equal(stub.args[0][0], 'live-updates');
+  test.equal(_.pick(stub.args[0][1], 'collection', 'count', 'type'), {
+    collection: 'coll1',
+    type: 'added',
+    count: 2
+  });
+  test.equal(stub.callCount, 1);
+  stub.stop();
+  done();
+});
+
+Tinytest.addAsync(
+'Client - DDPProvider - incoming - added messages - tracked with diff coll', 
+function(test, done) {
+  var stub = StartStubbing(StoreManager, 'trackEvent');
+  var caller = DDPProvider._livedata_data(function() {});
+
+  caller({msg: 'added', collection: 'coll1'});
+  caller({msg: 'added', collection: 'coll1'});
+  caller({msg: 'added', collection: 'coll2'});
+  test.equal(stub.args[0][0], 'live-updates');
+  test.equal(_.pick(stub.args[0][1], 'collection', 'count', 'type'), {
+    collection: 'coll1',
+    type: 'added',
+    count: 2
+  });
+  test.equal(stub.callCount, 1);
+  stub.stop();
+  done();
+});
+
+Tinytest.addAsync(
+'Client - DDPProvider - incoming - added messages - tracked with beforePush', 
+function(test, done) {
+  var stub = StartStubbing(StoreManager, 'trackEvent');
+  var stub2 = StartStubbing(StoreManager, 'beforePush');
+  var caller = DDPProvider._livedata_data(function() {});
+
+  caller({msg: 'added', collection: 'coll1'});
+  caller({msg: 'added', collection: 'coll1'});
+  stub2.args[0][0]();
+
+  test.equal(stub.args[0][0], 'live-updates');
+  test.equal(_.pick(stub.args[0][1], 'collection', 'count', 'type'), {
+    collection: 'coll1',
+    type: 'added',
+    count: 2
+  });
+  test.equal(stub.callCount, 1);
+  stub.stop();
+  stub2.stop();
+  done();
+});
+
+Tinytest.addAsync(
 'Client - DDPProvider - incoming - nosub message', 
 function(test, done) {
   var stub = StartStubbing(StoreManager, 'trackEvent');
