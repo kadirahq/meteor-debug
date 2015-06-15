@@ -1,5 +1,9 @@
 # Change Log
 
+#### v1.3.1
+
+* Check userAgent for string in the method `kadira.debug.getBrowserName`
+
 #### v1.3.0
 * Use the actual browser name as the browseId. For this we parse, the userAgent. But, we don't parse it on the client. Instead, we do it on the server. By doing that, we don't need to send some additional code to the client. (ua-parser code)
 
