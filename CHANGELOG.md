@@ -1,5 +1,9 @@
 # Change Log
 
+#### v1.3.2
+
+* Allow to use apps on Firefox. Fixes [#7](https://github.com/meteorhacks/kadira-debug/issues/6).
+
 #### v1.3.1
 
 * Check userAgent for string in the method `kadira.debug.getBrowserName`

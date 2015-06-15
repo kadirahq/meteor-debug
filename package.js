@@ -1,6 +1,6 @@
 Package.describe({
   summary: 'Full Stack Debugging Solution for Meteor',
-  version: '1.3.1',
+  version: '1.3.2',
   git: 'https://github.com/meteorhacks/kadira-debug',
   name: "meteorhacks:kadira-debug",
   debugOnly: true
