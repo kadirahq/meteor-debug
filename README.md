@@ -62,6 +62,9 @@ Yes it is. We'll never block/restrict any debug related features. But, we'll add
 #### I don't have a Kadira Account
 You don't need to have a Kadira or Meteor Account to use Kadira Debug. But, you should try to create an account :)
 
+#### Is it with Nitrous.io or in the cloud?
+Yes it is. In "Nitrous.io", your app runs as a dev app. So, it'll work. Just enter the app URL. Likewise, it'll work with any other cloud development environment. Additionally, Kadira Debug also works if you deploy your app with the debug mode (`--debug`).
+
 #### Will it support React?
 
 React is becoming the standard for UI components. Meteor is supporting it officially soon. So, it's a shame we wouldn't support it.
