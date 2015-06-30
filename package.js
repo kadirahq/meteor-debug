@@ -1,6 +1,6 @@
 Package.describe({
   summary: 'Full Stack Debugging Solution for Meteor',
-  version: '1.3.3',
+  version: '1.3.4',
   git: 'https://github.com/meteorhacks/kadira-debug',
   name: "meteorhacks:kadira-debug",
   debugOnly: true
@@ -46,6 +46,7 @@ function configure(api) {
   api.use('iron:router@1.0.0', {weak:true});
 
 
+  api.addFiles('lib/client/init.js', 'client');
   api.addFiles('lib/client/utils.js', 'client');
   api.addFiles('lib/client/store.js', 'client');
 
@@ -54,6 +55,7 @@ function configure(api) {
   api.addFiles('lib/client/providers/iron_router.js', 'client');
   api.addFiles('lib/client/providers/ddp.js', 'client');
   api.addFiles('lib/client/providers/hcr.js', 'client');
+  api.addFiles('lib/client/providers/log.js', 'client');
 
   api.addFiles('lib/client/connect.js', 'client');
 
