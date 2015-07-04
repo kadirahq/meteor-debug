@@ -42,6 +42,7 @@ function configure(api) {
   api.use('mongo');
   api.use('tracker');
   api.use('localstorage');
+  api.use('cosmos:browserify@0.4.0');
   api.use('meteorhacks:flow-router@0.0.16 || 1.0.0', {weak:true});
   api.use('iron:router@1.0.0', {weak:true});
 
@@ -54,6 +55,7 @@ function configure(api) {
   api.addFiles('lib/client/providers/iron_router.js', 'client');
   api.addFiles('lib/client/providers/ddp.js', 'client');
   api.addFiles('lib/client/providers/hcr.js', 'client');
+  api.addFiles('lib/client/providers/system.js', 'client');
 
   api.addFiles('lib/client/connect.js', 'client');
 
