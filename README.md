@@ -25,7 +25,7 @@ Now, you'll be able to see what's happening in your app as you interact with you
 
 ---
 
-If you like to learn more about the Kadira Debug UI and how to interpret it, watch following video:
+If you'd like to learn more about the Kadira Debug UI and how to interpret it, watch the following video:
 
 [![](https://cldup.com/eDEvWF2VMT.png)](https://www.youtube.com/watch?v=lrAYlayAWMI)
 
@@ -33,34 +33,37 @@ If you like to learn more about the Kadira Debug UI and how to interpret it, wat
 
 #### How does it work?
 
-Kadira Debug UI directly connects to your locally running app via DDP. Then it can collect data from both your server and the browser and display in a nice interface. If you like to learn more, why don't you hack this repo :)
+Kadira Debug UI directly connects to your locally running app via DDP. Then it can collect data from both your server and the browser and display it in a nice interface. If you'd like to learn more, why don't you hack this repo? :)
 
 #### Does it affect the performance of my app?
 
-Not necessarily. Kadira Debug collect, aggregate and send data in an effective way. So, it won't add any noticeable overhead to your app. If it does, open an issue. We'd love to fix it.
+Not necessarily. Kadira Debug collects, aggregates and sends data in an effective way. So, it won't add any noticeable overhead to your app. If it does, open an issue. We'd love to fix it.
 
 #### Is it secure?
 
-Kadira Debug is a `debugOnly` package. So, it won't goes into the production build. It also does not send or route data outside of your machine. Kadira Debug UI directly connects to your app via DDP. No proxies; No hacks.
+Kadira Debug is a `debugOnly` package. It will **_not_** go into the production build. It also does not send or route data outside of your machine. Kadira Debug UI directly connects to your app via DDP. No proxies. No hacks.
 
-#### Why it's not HTTPS?
+#### Why isn't it HTTPS?
 
-Did you notice we are using a different domain for Kadira Debug. Here is it: `http://debug.kadiraio.com/debug`. That's because of a security feature of modern browsers. 
+Did you notice we're using a different domain for Kadira Debug? Here it is: `http://debug.kadiraio.com/debug`. That's because of a security feature of modern browsers. 
 
-Browsers restrict HTTPS web pages to access non-https content. So, if we served Kadira Debug on a `*.kadira.io` domain with HTTPS, we can't connect to localhost. That's why we are using a seperate domain without HTTPS.
+Browsers restrict HTTPS web pages from accessing non-HTTPS content. So, if we serve Kadira Debug on a `*.kadira.io` domain with HTTPS, we can't connect to localhost. That's why we're using a seperate domain without HTTPS.
 
-**This is secure since we don't communicate with Kadira Servers inside Kadira Debug. Even if we do, we'll use some other techniques to make sure DDP connection is always secure.**
+**This is secure since we don't communicate with Kadira Servers inside Kadira Debug. Even if we do, we'll use some other techniques to make sure the DDP connection is always secure.**
 
 #### Is it Open Source?
 
-Yes and No. Checkout this repo. It's the core of Kadira Debug and how we collect data. It's Open Source under MIT. But, our Kadira Debug UI is not open source.
+Yes and No. Checkout this repo. It's the core of Kadira Debug and how we collect data. It's open source under MIT. But, our Kadira Debug UI is not open source.
 
 #### Is it FREE?
 
-Yes it is. We'll never block/restrict any debug related features. But, we'll add few value added services like sharing and remote debugging.
+Yes, it is. We'll never block/restrict any debug-related features. But, we'll add a few value-added services like sharing and remote debugging.
 
-#### I don't have a Kadira Account
+#### What if I don't have a Kadira Account?
 You don't need to have a Kadira or Meteor Account to use Kadira Debug. But, you should try to create an account :)
+
+#### Does it work with Nitrous.io or in the cloud?
+Yes, it does. In "Nitrous.io", your app runs as a dev app. So, it'll work. Just enter the app URL. Likewise, it'll work with any other cloud development environment. Additionally, Kadira Debug also works if you deploy your app with the debug mode (`--debug`).
 
 #### Will it support React?
 
