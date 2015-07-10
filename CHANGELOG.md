@@ -1,5 +1,8 @@
 # Change Log
 
+#### v2.0.1
+* Add old version removal notice. We need to do this because our older version is a different package.
+
 #### v2.0.0
 * Add system metrics support
 * Move project to kadira
