@@ -13,7 +13,7 @@ It'll also helps you to **fix** hard to debug UI issues.
 First add following package to your app:
 
 ~~~js
-meteor add meteorhacks:kadira-debug
+meteor add kadira:debug
 ~~~
 
 
