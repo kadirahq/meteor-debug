@@ -1,5 +1,9 @@
 # Change Log
 
+#### v2.0.0
+* Add system metrics support
+* Move project to kadira
+
 #### v1.3.3
 * Set view context to autruns runs inside Templates. Fixes [#7](https://github.com/meteorhacks/kadira-debug/issues/6)
 
