@@ -45,7 +45,9 @@ function configure(api) {
   api.use('cosmos:browserify@0.4.0');
   api.use('meteorhacks:flow-router@0.0.16 || 1.0.0', {weak:true});
   api.use('iron:router@1.0.0', {weak:true});
+  api.use('meteorhacks:kadira-debug@1.3.3', {weak: true});
 
+  api.addFiles('lib/server/old_version_removal.js', 'server');
 
   api.addFiles('lib/client/utils.js', 'client');
   api.addFiles('lib/client/store.js', 'client');
