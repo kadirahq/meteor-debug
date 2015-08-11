@@ -28,6 +28,7 @@ Package.onTest(function(api) {
   api.addFiles('tests/client/providers/iron_router.js', 'client');
   api.addFiles('tests/client/providers/flow_router.js', 'client');
   api.addFiles('tests/server/integration.js', 'server');
+  api.addFiles('tests/server/unit.js', 'server');
 });
 
 function configure(api) {

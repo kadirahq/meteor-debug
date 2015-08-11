@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "lru-cache": {
+      "version": "2.6.5"
+    },
+    "ua-parser-js": {
+      "version": "0.7.7"
+    }
+  }
+}
