@@ -2,7 +2,7 @@ var traceStore = new TraceStore();
 traceStore.start();
 
 Tinytest.add(
-'Server - Unit - TraceStore - registerSession / unregisterSession',
+'Server - Unit - TraceStore - registerSession',
 function(test) {
   var sessionId = 'sid';
   var browserId = 'bid';
