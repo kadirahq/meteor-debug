@@ -81,6 +81,53 @@ function(test, done) {
   }, 200);
 });
 
+// Tinytest.addAsync(
+//   'Server - Integration - getTrace',
+//   function(test, done) {
+
+//     // first we need to build a trace
+//     var traceStore = new TraceStore();
+//     traceStore.start();
+
+//     var session = {id: 'bidcid'};
+//     var sampleTrace = {
+//       _id: "HvnxHFEBb3YzCT5Tg::sid",
+//       _lastEventId: null,
+//       at: 1439281811540,
+//       errored: false,
+//       events: [{0: "start", 1: 0}],
+//       id: "sid",
+//       isEventsProcessed: true,
+//       metrics: {
+//         compute: 2,
+//         db: 3,
+//         total: 5,
+//         wait: 0
+//       },
+//       name: "aaa",
+//       session: "HvnxHFEBb3YzCT5Tg",
+//       startTime: new Date(),
+//       totalValue: 5,
+//       type: "pubsub",
+//       userId: null
+//     };
+
+//     traceStore._onSubTrace(session, sampleTrace);
+
+//     // get trace
+//     var browserId = "bid";
+//     var clientId = "cid";
+//     var type = "pubsub";
+//     var id = "bidcid";
+
+//     var sender = GetConn();
+//     var trace = sender.call('kadira.debug.getTrace', browserId, clientId, type, id);
+
+//     console.log(trace);
+
+//     done();
+//   }
+// );
 
 function GetConn() {
   return DDP.connect(process.env.ROOT_URL);
