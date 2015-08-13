@@ -18,14 +18,14 @@ Tinytest.add(
 function(test) {
   // build trace first
   // sample data
-  var session = {id: 'bidcid'};
+  var session = {id: 'sid'};
   var sampleTrace = {
     _id: "HvnxHFEBb3YzCT5Tg::sid",
     _lastEventId: null,
     at: 1439281811540,
     errored: false,
     events: [{0: "start", 1: 0}],
-    id: "sid",
+    id: "bidcid",
     isEventsProcessed: true,
     metrics: {
       compute: 2,
@@ -35,13 +35,11 @@ function(test) {
     },
     name: "aaa",
     session: "HvnxHFEBb3YzCT5Tg",
-    startTime: new Date(),
-    totalValue: 5,
     type: "method",
     userId: null
   };
 
-  traceStore._onMethodTrace(session, sampleTrace);
+  traceStore._onMethodTrace(sampleTrace, session);
 
   // get traces
   var browserId = 'bid';
@@ -49,8 +47,18 @@ function(test) {
   var type = 'method';
   var id = 'bidcid';
 
+  // expected trace
+  var expectedTrace = sampleTrace;
+  expectedTrace.startTime = new Date();
+  expectedTrace.totalValue = 5;
+
   var trace = traceStore.getTrace(browserId, clientId, type, id);
-  test.isNotUndefined(trace);
+
+  var trace = JSON.stringify(trace);
+  var expectedTrace = JSON.stringify(expectedTrace);
+
+  test.equal(trace, expectedTrace);
+
 });
 
 Tinytest.add(
@@ -58,7 +66,7 @@ Tinytest.add(
 function(test) {
   // build trace first
   // sample data
-  var session = {id: 'bidcid'};
+  var session = {id: 'sid'};
 
   var sampleTrace = {
     _id: "HvnxHFEBb3YzCT5Tg::sid",
@@ -66,7 +74,7 @@ function(test) {
     at: 1439281811540,
     errored: false,
     events: [{0: "start", 1: 0}],
-    id: "sid",
+    id: "bidcid",
     isEventsProcessed: true,
     metrics: {
       compute: 2,
@@ -76,13 +84,11 @@ function(test) {
     },
     name: "aaa",
     session: "HvnxHFEBb3YzCT5Tg",
-    startTime: new Date(),
-    totalValue: 5,
     type: "pubsub",
     userId: null
   };
 
-  traceStore._onSubTrace(session, sampleTrace);
+  traceStore._onSubTrace(sampleTrace, session);
 
   // get trace
   var browserId = 'bid';
@@ -90,8 +96,17 @@ function(test) {
   var type = 'pubsub';
   var id = 'bidcid';
 
+  // expected trace
+  var expectedTrace = sampleTrace;
+  expectedTrace.startTime = new Date();
+  expectedTrace.totalValue = 5;
+
   var trace = traceStore.getTrace(browserId, clientId, type, id);
-  test.isNotUndefined(trace);
+  
+  var trace = JSON.stringify(trace);
+  var expectedTrace = JSON.stringify(expectedTrace);
+
+  test.equal(trace, expectedTrace);
 });
 
 Tinytest.add(

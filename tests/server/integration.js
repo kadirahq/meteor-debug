@@ -81,53 +81,51 @@ function(test, done) {
   }, 200);
 });
 
-// Tinytest.addAsync(
-//   'Server - Integration - getTrace',
-//   function(test, done) {
+Tinytest.addAsync(
+  'Server - Integration - getTrace',
+  function(test, done) {
+    var sessionId = 'sid';
+    var browserId = 'bid';
+    var clientId = 'cid';
 
-//     // first we need to build a trace
-//     var traceStore = new TraceStore();
-//     traceStore.start();
+    var sender = GetConn();
+    var receiver = GetConn();
 
-//     var session = {id: 'bidcid'};
-//     var sampleTrace = {
-//       _id: "HvnxHFEBb3YzCT5Tg::sid",
-//       _lastEventId: null,
-//       at: 1439281811540,
-//       errored: false,
-//       events: [{0: "start", 1: 0}],
-//       id: "sid",
-//       isEventsProcessed: true,
-//       metrics: {
-//         compute: 2,
-//         db: 3,
-//         total: 5,
-//         wait: 0
-//       },
-//       name: "aaa",
-//       session: "HvnxHFEBb3YzCT5Tg",
-//       startTime: new Date(),
-//       totalValue: 5,
-//       type: "pubsub",
-//       userId: null
-//     };
+    Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.init', clientId, browserId);
 
-//     traceStore._onSubTrace(session, sampleTrace);
+    // build the trace
+    // var session = {id: 'sid'};
+    // var sampleTrace = {
+    //   _id: "HvnxHFEBb3YzCT5Tg::sid",
+    //   _lastEventId: null,
+    //   at: 1439281811540,
+    //   errored: false,
+    //   events: [{0: "start", 1: 0}],
+    //   id: "bidcid",
+    //   isEventsProcessed: true,
+    //   metrics: {
+    //     compute: 2,
+    //     db: 3,
+    //     total: 5,
+    //     wait: 0
+    //   },
+    //   name: "aaa",
+    //   session: "HvnxHFEBb3YzCT5Tg",
+    //   type: "pubsub",
+    //   userId: null
+    // };
 
-//     // get trace
-//     var browserId = "bid";
-//     var clientId = "cid";
-//     var type = "pubsub";
-//     var id = "bidcid";
+    // receiver.traceStore._onSubTrace(sampleTrace, session);
 
-//     var sender = GetConn();
-//     var trace = sender.call('kadira.debug.getTrace', browserId, clientId, type, id);
+    // get trace
+    var type = 'pubsub';
+    var id = 'bidcid';
 
-//     console.log(trace);
-
-//     done();
-//   }
-// );
+    // Unless the method check is failed, this test will not fail.
+    var trace = sender.call('kadira.debug.getTrace', browserId, clientId, type, id);
+    done();
+  }
+);
 
 function GetConn() {
   return DDP.connect(process.env.ROOT_URL);
