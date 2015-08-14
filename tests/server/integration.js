@@ -89,39 +89,13 @@ Tinytest.addAsync(
     var clientId = 'cid';
 
     var sender = GetConn();
-    var receiver = GetConn();
 
     Meteor.wrapAsync(sender.subscribe, sender)('kadira.debug.init', browserId, clientId);
-
-    // build the trace
-    var session = {id: 'sid'};
-    var sampleTrace = {
-      _id: 'Hvnx::sid',
-      _lastEventId: null,
-      at: 1439281811540,
-      errored: false,
-      events: [{0: 'start', 1: 0}],
-      id: 'bidcid',
-      isEventsProcessed: true,
-      metrics: {
-        compute: 2,
-        db: 3,
-        total: 5,
-        wait: 0
-      },
-      name: 'aaa',
-      session: 'sid',
-      type: 'method',
-      userId: null
-    };
-
-    // get trace
-    var type = 'method';
-
-    sender.call('kadira.debug.getTrace', browserId, clientId, type, "0");
-    var trace = sender.call('kadira.debug.getTrace', browserId, clientId, type, "1");
+    sender.call('kadira.debug.getTrace', browserId, clientId, "method", "0");
+    var trace = sender.call('kadira.debug.getTrace', browserId, clientId, "method", "1");
 
     test.isNotUndefined(trace);
+    test.equal(trace.id, "1");
 
     done();
   }
