@@ -84,7 +84,6 @@ function(test, done) {
 Tinytest.addAsync(
   'Server - Integration - getTrace',
   function(test, done) {
-    var sessionId = 'sid';
     var browserId = 'bid';
     var clientId = 'cid';
 
