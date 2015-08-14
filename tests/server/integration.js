@@ -91,38 +91,38 @@ Tinytest.addAsync(
     var sender = GetConn();
     var receiver = GetConn();
 
-    Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.init', clientId, browserId);
+    Meteor.wrapAsync(sender.subscribe, sender)('kadira.debug.init', browserId, clientId);
 
     // build the trace
-    // var session = {id: 'sid'};
-    // var sampleTrace = {
-    //   _id: "HvnxHFEBb3YzCT5Tg::sid",
-    //   _lastEventId: null,
-    //   at: 1439281811540,
-    //   errored: false,
-    //   events: [{0: "start", 1: 0}],
-    //   id: "bidcid",
-    //   isEventsProcessed: true,
-    //   metrics: {
-    //     compute: 2,
-    //     db: 3,
-    //     total: 5,
-    //     wait: 0
-    //   },
-    //   name: "aaa",
-    //   session: "HvnxHFEBb3YzCT5Tg",
-    //   type: "pubsub",
-    //   userId: null
-    // };
-
-    // receiver.traceStore._onSubTrace(sampleTrace, session);
+    var session = {id: 'sid'};
+    var sampleTrace = {
+      _id: 'Hvnx::sid',
+      _lastEventId: null,
+      at: 1439281811540,
+      errored: false,
+      events: [{0: 'start', 1: 0}],
+      id: 'bidcid',
+      isEventsProcessed: true,
+      metrics: {
+        compute: 2,
+        db: 3,
+        total: 5,
+        wait: 0
+      },
+      name: 'aaa',
+      session: 'sid',
+      type: 'method',
+      userId: null
+    };
 
     // get trace
-    var type = 'pubsub';
-    var id = 'bidcid';
+    var type = 'method';
 
-    // Unless the method check is failed, this test will not fail.
-    var trace = sender.call('kadira.debug.getTrace', browserId, clientId, type, id);
+    sender.call('kadira.debug.getTrace', browserId, clientId, type, "0");
+    var trace = sender.call('kadira.debug.getTrace', browserId, clientId, type, "1");
+
+    test.isNotUndefined(trace);
+
     done();
   }
 );
@@ -130,4 +130,3 @@ Tinytest.addAsync(
 function GetConn() {
   return DDP.connect(process.env.ROOT_URL);
 }
-

@@ -70,7 +70,7 @@ function(test, done) {
       type: type,
       name: name,
       count: 1
-    });;
+    });
 
     test.isTrue(activity.elapsedTime >= 100);
     done();
@@ -98,7 +98,7 @@ function(test, done) {
         type: type,
         name: name,
         count: 2
-      });;
+      });
 
       test.isTrue(activity.elapsedTime >= 20);
       done();
