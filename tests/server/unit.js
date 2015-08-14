@@ -58,7 +58,6 @@ function(test) {
   var expectedTrace = JSON.stringify(expectedTrace);
 
   test.equal(trace, expectedTrace);
-
 });
 
 Tinytest.add(
