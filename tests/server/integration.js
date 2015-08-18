@@ -81,8 +81,23 @@ function(test, done) {
   }, 200);
 });
 
+Tinytest.addAsync(
+  'Server - Integration - getTrace',
+  function(test, done) {
+    var browserId = 'bid';
+    var clientId = 'cid';
+
+    var sender = GetConn();
+    Meteor.wrapAsync(sender.subscribe, sender)('kadira.debug.init', browserId, clientId);
+    sender.call('kadira.debug.getTrace', browserId, clientId, "method", "0");
+    var trace = sender.call('kadira.debug.getTrace', browserId, clientId, "method", "1");
+
+    test.isNotUndefined(trace);
+    test.equal(trace.id, "1");
+    done();
+  }
+);
 
 function GetConn() {
   return DDP.connect(process.env.ROOT_URL);
 }
-
