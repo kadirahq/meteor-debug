@@ -2,7 +2,7 @@ var traceStore = new TraceStore();
 traceStore.start();
 
 Tinytest.add(
-'Server - Unit - TraceStore - registerSession',
+'Server - TraceStore - registerSession',
 function(test) {
   var sessionId = 'sid';
   var browserId = 'bid';
@@ -14,7 +14,7 @@ function(test) {
 });
 
 Tinytest.add(
-'Server - Unit - TraceStore - getTrace (Method)',
+'Server - TraceStore - getTrace (Method)',
 function(test) {
   // build trace first
   // sample data
@@ -61,7 +61,7 @@ function(test) {
 });
 
 Tinytest.add(
-'Server - Unit - TraceStore - getTrace (PubSub)',
+'Server - TraceStore - getTrace (PubSub)',
 function(test) {
   // build trace first
   // sample data
@@ -109,7 +109,7 @@ function(test) {
 });
 
 Tinytest.add(
-  'Server - Unit - TraceStore - _buildTrace',
+  'Server - TraceStore - _buildTrace',
   function(test) {
 
     var sampleTrace = {
@@ -164,7 +164,85 @@ Tinytest.add(
 );
 
 Tinytest.add(
-'Server - Unit - TraceStore - unregisterSession',
+'Server - TraceStore - _trackTime',
+function(test) {
+  var type = "pubsub";
+  var sessionId = "sid";
+  var id = Random.id();
+  var event = "server-received";
+
+  var s = new TraceStore();
+  s._trackTime(type, sessionId, id, event);
+  
+  var savedItems = s._timeEventsCache.get(sessionId);
+  var savedItem = savedItems.times[0];
+  var expectedItem = {
+    type: type,
+    id: id, 
+    event: event
+  };
+  test.equal(_.omit(savedItem, 'timestamp'), expectedItem);
+});
+
+Tinytest.add(
+'Server - TraceStore - _trackTime twice',
+function(test) {
+  var type = "pubsub";
+  var sessionId = "sid";
+  var id = Random.id();
+  var event = "server-received";
+
+  var s = new TraceStore();
+  s._trackTime(type, sessionId, id, event);
+  s._trackTime(type, sessionId, id, event);
+  
+  var expectedItem = {
+    type: type,
+    id: id, 
+    event: event
+  };
+  var savedItems = s._timeEventsCache.get(sessionId);
+  var savedItem1 = savedItems.times[0];
+  var savedItem2 = savedItems.times[1];
+
+  test.equal(_.omit(savedItem1, 'timestamp'), expectedItem);
+  test.equal(_.omit(savedItem2, 'timestamp'), expectedItem);
+});
+
+Tinytest.add(
+'Server - TraceStore - pickTimeEvents',
+function(test) {
+  var clientId = "clientId";
+  var browserId = "browserId";
+
+  var type = "pubsub";
+  var sessionId = "sid";
+  var id = Random.id();
+  var event = "server-received";
+
+  var s = new TraceStore();
+  s.registerSession(sessionId, browserId, clientId);
+
+  var expectedItem = {
+    type: type,
+    id: id, 
+    event: event
+  };
+
+  s._trackTime(type, sessionId, id, event);
+  s._trackTime(type, sessionId, id, event);
+  
+  var savedItems = s.pickTimeEvents(browserId, clientId);
+  var savedItem1 = savedItems[0];
+  var savedItem2 = savedItems[1];
+
+  test.equal(_.omit(savedItem1, 'timestamp'), expectedItem);
+  test.equal(_.omit(savedItem2, 'timestamp'), expectedItem);
+  test.isFalse(s._timeEventsCache.has(sessionId));
+});
+
+Tinytest.add(
+'Server - TraceStore - unregisterSession',
 function(test) {
   var browserId = 'bid';
   var clientId = 'cid';
