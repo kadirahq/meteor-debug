@@ -47,7 +47,7 @@ Kadira Debug is a `debugOnly` package. It will **_not_** go into the production 
 
 Did you notice we're using a different domain for Kadira Debug? Here it is: `http://debug.kadiraio.com/debug`. That's because of a security feature of modern browsers. 
 
-Browsers restrict HTTPS web pages from accessing non-HTTPS content. So, if we serve Kadira Debug on a `*.kadira.io` domain with HTTPS, we can't connect to localhost. That's why we're using a seperate domain without HTTPS.
+Browsers restrict HTTPS web pages from accessing non-HTTPS content. So, if we serve Kadira Debug on a `*.kadira.io` domain with HTTPS, we can't connect to localhost. That's why we're using a separate domain without HTTPS.
 
 **This is secure since we don't communicate with Kadira Servers inside Kadira Debug. Even if we do, we'll use some other techniques to make sure the DDP connection is always secure.**
 
@@ -67,8 +67,8 @@ Yes, it does. In "Nitrous.io", your app runs as a dev app. So, it'll work. Just 
 
 #### Will it support React?
 
-React is becoming the standard for UI components. Meteor is supporting it officially soon. So, it's a shame we wouldn't support it.
+React is becoming the standard for UI components. Meteor is supporting it officially soon. So, it'd be a shame if we wouldn't support it.
 
-#### I've a different question?
+#### I have a different question
 
 Submit an issue on this repo. If you need to send us a private message, send it to `support@kadira.io`.
