@@ -1,29 +1,37 @@
 Tinytest.addAsync(
 'Server - Integration - connect and receive timeline updates', 
 function(test, done) {
-  var browserId = "bid";
-  var clientId = "cid";
-  var data = {aa: 10};
-
   var receiver = GetConn();
   var sender = GetConn();
   var coll = new Mongo.Collection('kdTimeline', {connection: receiver});
 
+  var checkData = _.once(function(doc) {
+    test.equal(typeof doc.browserId, 'string');
+    test.equal(typeof doc.clientId, 'string');
+    test.isTrue(doc.data.timestamp <= Date.now());
+    test.isTrue(doc.data.times.length > 0);
+
+    // checking whether we tracked time related errors on the server side
+    var trackedMethodTimes = false;
+    doc.data.times.forEach(function(item) {
+      if(item.type === "method" && item.id === "1" && item.event === "server-processed") {
+        trackedMethodTimes = true;
+      }
+    });
+    test.isTrue(trackedMethodTimes);
+
+    sender.disconnect();
+    receiver.disconnect();
+    done();
+  });
+
   var observeHandle = coll.find().observe({
-    added: function(doc) {
-      test.equal(_.omit(doc, '_id'), {
-        browserId: browserId,
-        clientId: clientId,
-        data: data
-      });
-      sender.disconnect();
-      receiver.disconnect();
-      done();
-    }
+    added: checkData
   });
 
   Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.timeline');
-  sender.call('kadira.debug.updateTimeline', browserId, clientId, data);
+  // This is a just a dummy call to make sure we get everything
+  sender.call('kadira.debug.getTrace', "bid", "cid", "pubsub", "not-existing-id");
 });
 
 Tinytest.addAsync(
