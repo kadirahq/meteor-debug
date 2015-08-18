@@ -162,7 +162,7 @@ Tinytest.addAsync(
 function(test, done) {
   var stub = StartStubbing(StoreManager, 'trackEvent');
   var message = {msg: 'nosub', id: "1", error: "the-error"};
-  var caller = DDPProvider._livedata_data(function(msg) {
+  var caller = DDPProvider._livedata_nosub(function(msg) {
     test.equal(msg, message);
     test.equal(stub.args[0], ['ddp-nosub', _.omit(message, 'msg')]);
     test.equal(stub.callCount, 1);
@@ -279,7 +279,7 @@ function(test, done) {
   var message = {msg: 'method', id: Random.id(), method: "kadira.debug.updateTimeline"};
   var caller = DDPProvider._send(function(msg) {
     test.equal(msg, message);
-    test.equal(DDPProvider.ignoringMethodIds[message.id], true);
+    test.equal(DDPProvider.ignoringMethodIds[message.id], 2);
     test.equal(stub.callCount, 0);
     stub.stop();
     done();
