@@ -98,6 +98,66 @@ function(test, done) {
 });
 
 Tinytest.addAsync(
+'Client - DDPProvider - incoming - track sample ddpMessages', 
+function(test, done) {
+  var stub = StartStubbing(StoreManager, 'trackEvent');
+  var stub2 = StartStubbing(StoreManager, 'beforePush');
+  var caller = DDPProvider._livedata_data(function() {});
+  var messages = [
+    {msg: 'added', collection: 'coll1', fields: 1},
+    {msg: 'added', collection: 'coll1', fields: 2}
+  ];
+  caller(messages[0]);
+  caller(messages[1]);
+  stub2.args[0][0]();
+
+  test.equal(stub.args[0][0], 'live-updates');
+  test.equal(_.pick(stub.args[0][1], 'collection', 'count', 'type', 'sampleMessages'), {
+    collection: 'coll1',
+    type: 'added',
+    count: 2,
+    sampleMessages: messages
+  });
+  test.equal(stub.callCount, 1);
+  stub.stop();
+  stub2.stop();
+  done();
+});
+
+Tinytest.addAsync(
+'Client - DDPProvider - incoming - track sample ddpMessages, but maximum of 5', 
+function(test, done) {
+  var stub = StartStubbing(StoreManager, 'trackEvent');
+  var stub2 = StartStubbing(StoreManager, 'beforePush');
+  var caller = DDPProvider._livedata_data(function() {});
+  var messages = [
+    {msg: 'added', collection: 'coll1', fields: 1},
+    {msg: 'added', collection: 'coll1', fields: 2},
+    {msg: 'added', collection: 'coll1', fields: 3},
+    {msg: 'added', collection: 'coll1', fields: 4},
+    {msg: 'added', collection: 'coll1', fields: 5},
+    {msg: 'added', collection: 'coll1', fields: 6},
+  ];
+  
+  messages.forEach(caller);
+  stub2.args[0][0]();
+
+  test.equal(stub.args[0][0], 'live-updates');
+
+  var trackedMessages = messages.slice(1);
+  test.equal(_.pick(stub.args[0][1], 'collection', 'count', 'type', 'sampleMessages'), {
+    collection: 'coll1',
+    type: 'added',
+    count: 6,
+    sampleMessages: trackedMessages
+  });
+  test.equal(stub.callCount, 1);
+  stub.stop();
+  stub2.stop();
+  done();
+});
+
+Tinytest.addAsync(
 'Client - DDPProvider - incoming - nosub message', 
 function(test, done) {
   var stub = StartStubbing(StoreManager, 'trackEvent');

@@ -81,6 +81,51 @@ function(test, done) {
   }, 200);
 });
 
+Tinytest.addAsync(
+  'Server - Integration - getTrace',
+  function(test, done) {
+    var sessionId = 'sid';
+    var browserId = 'bid';
+    var clientId = 'cid';
+
+    var sender = GetConn();
+    var receiver = GetConn();
+
+    Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.init', clientId, browserId);
+
+    // build the trace
+    // var session = {id: 'sid'};
+    // var sampleTrace = {
+    //   _id: "HvnxHFEBb3YzCT5Tg::sid",
+    //   _lastEventId: null,
+    //   at: 1439281811540,
+    //   errored: false,
+    //   events: [{0: "start", 1: 0}],
+    //   id: "bidcid",
+    //   isEventsProcessed: true,
+    //   metrics: {
+    //     compute: 2,
+    //     db: 3,
+    //     total: 5,
+    //     wait: 0
+    //   },
+    //   name: "aaa",
+    //   session: "HvnxHFEBb3YzCT5Tg",
+    //   type: "pubsub",
+    //   userId: null
+    // };
+
+    // receiver.traceStore._onSubTrace(sampleTrace, session);
+
+    // get trace
+    var type = 'pubsub';
+    var id = 'bidcid';
+
+    // Unless the method check is failed, this test will not fail.
+    var trace = sender.call('kadira.debug.getTrace', browserId, clientId, type, id);
+    done();
+  }
+);
 
 function GetConn() {
   return DDP.connect(process.env.ROOT_URL);
