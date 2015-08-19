@@ -286,7 +286,7 @@ function(test, done) {
     test.equal(stub.callCount, 1);
     stub.stop();
 
-    test.equal(stub2.args[0], ['pubsub', '1', 'start']);
+    test.equal(stub2.args[0], ['pubsub', '1', 'start', {name: 'the-name'}]);
     test.equal(stub2.callCount, 1);
     stub2.stop();
     done();
@@ -331,7 +331,7 @@ function(test, done) {
     test.equal(stub.callCount, 1);
     stub.stop();
 
-    test.equal(stub2.args[0], ['method', '1', 'start']);
+    test.equal(stub2.args[0], ['method', '1', 'start', {name: 'the-method'}]);
     test.equal(stub2.callCount, 1);
     stub2.stop();
 

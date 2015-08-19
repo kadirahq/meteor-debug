@@ -147,6 +147,29 @@ function(test, done) {
 });
 
 Tinytest.addAsync(
+'Store - trackTime with info', 
+function(test, done) {
+  var s = GetStore();
+  var type = 'pubsub';
+  var id = Random.id();
+  var event = "start";
+  var time = Date.now();
+  var info = {name: "my-method"};
+  s.trackTime(type, id, event, info);
+
+  var item = s._getCurrentDataBlock(time).times[0];
+  test.equal(_.omit(item, 'timestamp'), {
+    type: type,
+    id: id,
+    event: event,
+    info: info
+  });
+  test.isTrue(item.timestamp >= time);
+  done();
+});
+
+
+Tinytest.addAsync(
 'Store - startup - before start', 
 function(test, done) {
   var s = GetStore();
