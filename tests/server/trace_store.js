@@ -185,6 +185,29 @@ function(test) {
 });
 
 Tinytest.add(
+'Server - TraceStore - _trackTime with info',
+function(test) {
+  var type = "pubsub";
+  var sessionId = "sid";
+  var id = Random.id();
+  var event = "server-received";
+  var info = {name: "aa-10"};
+
+  var s = new TraceStore();
+  s._trackTime(type, sessionId, id, event, info);
+  
+  var savedItems = s._timeEventsCache.get(sessionId);
+  var savedItem = savedItems.times[0];
+  var expectedItem = {
+    type: type,
+    id: id, 
+    event: event,
+    info: info
+  };
+  test.equal(_.omit(savedItem, 'timestamp'), expectedItem);
+});
+
+Tinytest.add(
 'Server - TraceStore - _trackTime twice',
 function(test) {
   var type = "pubsub";

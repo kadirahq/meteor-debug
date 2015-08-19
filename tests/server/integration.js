@@ -13,12 +13,18 @@ function(test, done) {
 
     // checking whether we tracked time related errors on the server side
     var trackedMethodTimes = false;
+    var trackInfo = false;
     doc.data.times.forEach(function(item) {
       if(item.type === "method" && item.id === "1" && item.event === "server-processed") {
         trackedMethodTimes = true;
       }
+
+      if(item.event === "server-received") {
+        trackInfo = typeof item.info.name === "string";
+      }
     });
     test.isTrue(trackedMethodTimes);
+    test.isTrue(trackInfo);
 
     sender.disconnect();
     receiver.disconnect();
