@@ -1,7 +1,10 @@
 # Change Log
 
+#### v2.2.0
+* Tracking traces and time related information to build the DDP timeline
+
 #### v2.1.0
-Track eventloop blockness as a percentage. It's not very clear to reason
+* Track eventloop blockness as a percentage. It's not very clear to reason
 
 #### v2.0.1
 * Add old version removal notice. We need to do this because our older version is a different package.
