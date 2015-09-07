@@ -70,7 +70,7 @@ function(test, done) {
       type: type,
       name: name,
       count: 1
-    });;
+    });
 
     test.isTrue(activity.elapsedTime >= 100);
     done();
@@ -98,13 +98,76 @@ function(test, done) {
         type: type,
         name: name,
         count: 2
-      });;
+      });
 
       test.isTrue(activity.elapsedTime >= 20);
       done();
     }, 10);
   }, 10);
 });
+
+Tinytest.addAsync(
+'Store - trackTime', 
+function(test, done) {
+  var s = GetStore();
+  var type = 'pubsub';
+  var id = Random.id();
+  var event = "start";
+  var time = Date.now();
+  s.trackTime(type, id, event);
+
+  var item = s._getCurrentDataBlock(time).times[0];
+  test.equal(_.omit(item, 'timestamp'), {
+    type: type,
+    id: id,
+    event: event
+  });
+  test.isTrue(item.timestamp >= time);
+  done();
+});
+
+Tinytest.addAsync(
+'Store - trackTime with custom timestamp', 
+function(test, done) {
+  var s = GetStore();
+  var type = 'pubsub';
+  var id = Random.id();
+  var event = "start";
+  var time = Date.now() - 4000;
+  s.trackTime(type, id, event, time);
+
+  var item = s._getCurrentDataBlock(time).times[0];
+  test.equal(_.omit(item, 'timestamp'), {
+    type: type,
+    id: id,
+    event: event
+  });
+  test.isTrue(item.timestamp === time);
+  done();
+});
+
+Tinytest.addAsync(
+'Store - trackTime with info', 
+function(test, done) {
+  var s = GetStore();
+  var type = 'pubsub';
+  var id = Random.id();
+  var event = "start";
+  var time = Date.now();
+  var info = {name: "my-method"};
+  s.trackTime(type, id, event, info);
+
+  var item = s._getCurrentDataBlock(time).times[0];
+  test.equal(_.omit(item, 'timestamp'), {
+    type: type,
+    id: id,
+    event: event,
+    info: info
+  });
+  test.isTrue(item.timestamp >= time);
+  done();
+});
+
 
 Tinytest.addAsync(
 'Store - startup - before start', 

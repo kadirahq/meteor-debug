@@ -7,7 +7,8 @@ Package.describe({
 });
 
 Npm.depends({
-  'ua-parser-js': '0.7.7'
+  'ua-parser-js': '0.7.7',
+  'lru-cache': '2.6.5'
 });
 
 Package.onUse(function (api) {
@@ -27,6 +28,7 @@ Package.onTest(function(api) {
   api.addFiles('tests/client/providers/iron_router.js', 'client');
   api.addFiles('tests/client/providers/flow_router.js', 'client');
   api.addFiles('tests/server/integration.js', 'server');
+  api.addFiles('tests/server/trace_store.js', 'server');
 });
 
 function configure(api) {
@@ -43,6 +45,7 @@ function configure(api) {
   api.use('tracker');
   api.use('localstorage');
   api.use('cosmos:browserify@0.4.0');
+  api.use('meteorhacks:kadira@2.23.0', 'server');
   api.use('meteorhacks:flow-router@0.0.16 || 1.0.0', {weak:true});
   api.use('iron:router@1.0.0', {weak:true});
   api.use('meteorhacks:kadira-debug@1.3.3', {weak: true});
@@ -61,5 +64,6 @@ function configure(api) {
 
   api.addFiles('lib/client/connect.js', 'client');
 
+  api.addFiles('lib/server/trace_store.js', 'server');
   api.addFiles('lib/server/connect.js', 'server');
 }
