@@ -1,5 +1,8 @@
 # Change Log
 
+#### v2.2.1
+* Update kadira to 2.23.x. It has Meteor 1.2 support
+
 #### v2.2.0
 * Tracking traces and time related information to build the DDP timeline
 
