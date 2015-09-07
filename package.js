@@ -45,7 +45,7 @@ function configure(api) {
   api.use('tracker');
   api.use('localstorage');
   api.use('cosmos:browserify@0.4.0');
-  api.use('meteorhacks:kadira@2.23.0', 'server');
+  api.use('meteorhacks:kadira@2.23.2', 'server');
   api.use('meteorhacks:flow-router@0.0.16 || 1.0.0', {weak:true});
   api.use('iron:router@1.0.0', {weak:true});
   api.use('meteorhacks:kadira-debug@1.3.3', {weak: true});
