@@ -5,16 +5,23 @@ function(test, done) {
   var sender = GetConn();
   var coll = new Mongo.Collection('kdTimeline', {connection: receiver});
 
+  var serverId = null;
+
   var checkData = _.once(function(doc) {
     test.equal(typeof doc.browserId, 'string');
     test.equal(typeof doc.clientId, 'string');
     test.isTrue(doc.data.timestamp <= Date.now());
     test.isTrue(doc.data.times.length > 0);
 
+    serverId = doc.data.serverId;
+    test.equal(typeof serverId, 'string');
+
     // checking whether we tracked time related errors on the server side
     var trackedMethodTimes = false;
     var trackInfo = false;
+
     doc.data.times.forEach(function(item) {
+
       if(item.type === "method" && item.id === "1" && item.event === "server-processed") {
         trackedMethodTimes = true;
       }
@@ -23,6 +30,7 @@ function(test, done) {
         trackInfo = typeof item.info.name === "string";
       }
     });
+
     test.isTrue(trackedMethodTimes);
     test.isTrue(trackInfo);
 
