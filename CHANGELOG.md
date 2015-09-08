@@ -1,5 +1,8 @@
 # Change Log
 
+#### v2.2.2
+* Sending unique keys to determine the version of client and server side of the app. Those keys are used to detect HCR on Kadira Debug UI.
+
 #### v2.2.1
 * Update kadira to 2.23.x. It has Meteor 1.2 support
 
