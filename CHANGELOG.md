@@ -1,5 +1,8 @@
 # Change Log
 
+#### v2.2.3
+* Fix typo `elasedTime`
+
 #### v2.2.2
 * Sending unique keys to determine the version of client and server side of the app. Those keys are used to detect HCR on Kadira Debug UI.
 
