@@ -18,6 +18,7 @@ Package.onUse(function (api) {
 Package.onTest(function(api) {
   configure(api);
   api.use('tinytest');
+  api.use('ddp');
   api.use('practicalmeteor:sinon@1.14.1_1');
   
   api.addFiles('tests/utils.js', ['server', 'client']);
