@@ -1,5 +1,8 @@
 # Change Log
 
+#### v2.2.4
+* Add check package and now it's possible to use this package with Meteor 1.2
+
 #### v2.2.3
 * Fix typo `elasedTime`
 
