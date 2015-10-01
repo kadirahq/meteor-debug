@@ -39,6 +39,7 @@ function configure(api) {
   api.use('templating');
   api.use('underscore');
   api.use('random');
+  api.use('check');
   api.use('session');
   api.use('reload');
   api.use('mongo');
