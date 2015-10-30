@@ -121,27 +121,7 @@ Tinytest.addAsync(
 );
 
 Tinytest.addAsync(
-  'Server - Integration - createAccessToken - Inavlid Auth Key',
-  function(test, done) {
-    var browserId = 'bid';
-    var clientId = 'cid';
-
-    var sender = GetConn();
-    Meteor.wrapAsync(sender.subscribe, sender)('kadira.debug.init', browserId, clientId);
-    sender.call('kadira.debug.getTrace', browserId, clientId, "method", "0");
-    
-    var response = sender.call('kadira.debug.createAccessToken', 'tempAuthKey');
-
-    test.isNotUndefined(response);
-    test.equal(response.env, false);
-    test.equal(response.access_token, null);
-
-    done();
-  }
-);
-
-Tinytest.addAsync(
-  'Server - Integration - createAccessToken - Valid Auth Key',
+  'Server - Integration - createAccessToken',
   function(test, done) {
     var browserId = 'bid';
     var clientId = 'cid';
@@ -152,7 +132,7 @@ Tinytest.addAsync(
     Meteor.wrapAsync(sender.subscribe, sender)('kadira.debug.init', browserId, clientId);
     sender.call('kadira.debug.getTrace', browserId, clientId, "method", "0");
     
-    var response = sender.call('kadira.debug.createAccessToken', 'tempAuthKey');
+    var response = sender.call('kadira.debug.createAccessToken');
 
     test.isNotUndefined(response);
     test.isNotUndefined(response.access_token);
