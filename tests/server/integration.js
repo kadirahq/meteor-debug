@@ -120,6 +120,48 @@ Tinytest.addAsync(
   }
 );
 
+Tinytest.addAsync(
+  'Server - Integration - createAccessToken - Inavlid Auth Key',
+  function(test, done) {
+    var browserId = 'bid';
+    var clientId = 'cid';
+
+    var sender = GetConn();
+    Meteor.wrapAsync(sender.subscribe, sender)('kadira.debug.init', browserId, clientId);
+    sender.call('kadira.debug.getTrace', browserId, clientId, "method", "0");
+    
+    var response = sender.call('kadira.debug.createAccessToken', 'tempAuthKey');
+
+    test.isNotUndefined(response);
+    test.equal(response.env, false);
+    test.equal(response.access_token, null);
+
+    done();
+  }
+);
+
+Tinytest.addAsync(
+  'Server - Integration - createAccessToken - Valid Auth Key',
+  function(test, done) {
+    var browserId = 'bid';
+    var clientId = 'cid';
+
+    AppConfig.authKey = "tempAuthKey";
+
+    var sender = GetConn();
+    Meteor.wrapAsync(sender.subscribe, sender)('kadira.debug.init', browserId, clientId);
+    sender.call('kadira.debug.getTrace', browserId, clientId, "method", "0");
+    
+    var response = sender.call('kadira.debug.createAccessToken', 'tempAuthKey');
+
+    test.isNotUndefined(response);
+    test.isNotUndefined(response.access_token);
+    test.equal(response.env, AppConfig.env);
+
+    done();
+  }
+);
+
 function GetConn() {
   return DDP.connect(process.env.ROOT_URL);
 }
