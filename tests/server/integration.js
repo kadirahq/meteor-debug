@@ -126,18 +126,19 @@ Tinytest.addAsync(
     var browserId = 'bid';
     var clientId = 'cid';
 
-    AppConfig.authKey = "tempAuthKey";
+    var authKey = "tempAuthKey";
+    AppConfig.authKey = authKey;
 
     var sender = GetConn();
     Meteor.wrapAsync(sender.subscribe, sender)('kadira.debug.init', browserId, clientId);
     sender.call('kadira.debug.getTrace', browserId, clientId, "method", "0");
     
-    var response = sender.call('kadira.debug.createAccessToken');
+    var token = sender.call('kadira.debug.createAccessToken', authKey);
 
-    test.isNotUndefined(response);
-    test.isNotUndefined(response.access_token);
-    test.equal(response.env, AppConfig.env);
+    test.isNotUndefined(token);
 
+    var tokenKey = authKey + '_' + token;
+    test.equal(token, AppConfig.accessToken.get(tokenKey));
     done();
   }
 );
