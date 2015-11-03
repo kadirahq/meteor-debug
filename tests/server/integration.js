@@ -1,6 +1,8 @@
 Tinytest.addAsync(
 'Server - Integration - connect and receive timeline updates', 
 function(test, done) {
+  resetAppConfig();
+
   var receiver = GetConn();
   var sender = GetConn();
   var coll = new Mongo.Collection('kdTimeline', {connection: receiver});
@@ -128,15 +130,13 @@ Tinytest.addAsync(
 
     var authKey = "tempAuthKey";
     AppConfig.authKey = authKey;
+    AppConfig.env = "production"
 
-    var sender = GetConn();
-    Meteor.wrapAsync(sender.subscribe, sender)('kadira.debug.init', browserId, clientId);
-    sender.call('kadira.debug.getTrace', browserId, clientId, "method", "0");
+    var receiver = GetConn();
+    Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.timeline', authKey);
     
-    var token = sender.call('kadira.debug.createAccessToken', authKey);
-
+    var token = receiver.call('kadira.debug.createAccessToken', authKey);
     test.isNotUndefined(token);
-
     var tokenKey = authKey + '_' + token;
     test.equal(token, AppConfig.accessToken.get(tokenKey));
     done();
@@ -145,4 +145,16 @@ Tinytest.addAsync(
 
 function GetConn() {
   return DDP.connect(process.env.ROOT_URL);
+}
+
+function resetAppConfig() {
+  var LRUCache = Npm.require('lru-cache');
+  
+  AppConfig = {
+    env: "development",
+    authKey: null,
+    accessToken: new LRUCache({max: 1000}),
+    _authorizedClientSessions: {},
+    _authorizedServerSessions: {}
+  };
 }
