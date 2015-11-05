@@ -204,7 +204,7 @@ function(test, done) {
     test.equal(Meteor.call.callCount, 1);
     var args = Meteor.call.args[0];
     var block = args[3];
-    test.equal(args[0], 'kadira.debug.updateTimeline');
+    test.equal(args[0], 'kadira.debug.client.updateTimeline');
     test.equal(args[1], browserId);
     test.equal(args[2], clientId);
     test.equal(block.events[0][1], 'type');

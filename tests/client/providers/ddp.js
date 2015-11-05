@@ -345,7 +345,7 @@ Tinytest.addAsync(
 'Client - DDPProvider - outgoing - ignoring method message', 
 function(test, done) {
   var stub = StartStubbing(StoreManager, 'trackEvent');
-  var message = {msg: 'method', id: Random.id(), method: 'kadira.debug.updateTimeline'};
+  var message = {msg: 'method', id: Random.id(), method: 'kadira.debug.client.updateTimeline'};
   var caller = DDPProvider._send(function(msg) {
     test.equal(msg, message);
     test.equal(DDPProvider.ignoringMethodIds[message.id], 2);

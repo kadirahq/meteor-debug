@@ -45,16 +45,16 @@ function(test, done) {
     added: checkData
   });
 
-  Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.timeline');
+  Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.admin.timeline');
   // This is a just a dummy call to make sure we get everything
-  sender.call('kadira.debug.getTrace', "bid", "cid", "pubsub", "not-existing-id");
+  sender.call('kadira.debug.admin.getTrace', "bid", "cid", "pubsub", "not-existing-id");
 });
 
 Tinytest.addAsync(
 'Server - Integration - remove timeline sub handle after disconnected', 
 function(test, done) {
   var receiver = GetConn();
-  Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.timeline');
+  Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.admin.timeline');
 
   var startTimelineCount = SubHandlers.timeline.length;
   receiver.disconnect();
@@ -72,10 +72,10 @@ Tinytest.addAsync(
 function(test, done) {
   var timelineReceiver = GetConn();
   var listersCountReceiver = GetConn();
-  Meteor.wrapAsync(timelineReceiver.subscribe, timelineReceiver)('kadira.debug.timeline');
+  Meteor.wrapAsync(timelineReceiver.subscribe, timelineReceiver)('kadira.debug.admin.timeline');
 
   var coll = new Mongo.Collection('kdInfo', {connection: listersCountReceiver});
-  Meteor.wrapAsync(listersCountReceiver.subscribe, listersCountReceiver)('kadira.debug.listeners');
+  Meteor.wrapAsync(listersCountReceiver.subscribe, listersCountReceiver)('kadira.debug.client.listeners');
 
   test.isTrue(coll.findOne({_id: 'listeners-count'}).count > 0);
   timelineReceiver.disconnect();
@@ -88,10 +88,10 @@ Tinytest.addAsync(
 function(test, done) {
   var timelineReceiver = GetConn();
   var listersCountReceiver = GetConn();
-  Meteor.wrapAsync(timelineReceiver.subscribe, timelineReceiver)('kadira.debug.timeline');
+  Meteor.wrapAsync(timelineReceiver.subscribe, timelineReceiver)('kadira.debug.admin.timeline');
 
   var coll = new Mongo.Collection('kdInfo', {connection: listersCountReceiver});
-  Meteor.wrapAsync(listersCountReceiver.subscribe, listersCountReceiver)('kadira.debug.listeners');
+  Meteor.wrapAsync(listersCountReceiver.subscribe, listersCountReceiver)('kadira.debug.client.listeners');
 
   var firstCount = coll.findOne({_id: 'listeners-count'}).count;
 
@@ -112,9 +112,9 @@ Tinytest.addAsync(
     var clientId = 'cid';
 
     var sender = GetConn();
-    Meteor.wrapAsync(sender.subscribe, sender)('kadira.debug.init', browserId, clientId);
-    sender.call('kadira.debug.getTrace', browserId, clientId, "method", "0");
-    var trace = sender.call('kadira.debug.getTrace', browserId, clientId, "method", "1");
+    Meteor.wrapAsync(sender.subscribe, sender)('kadira.debug.client.init', browserId, clientId);
+    sender.call('kadira.debug.admin.getTrace', browserId, clientId, "method", "0");
+    var trace = sender.call('kadira.debug.admin.getTrace', browserId, clientId, "method", "1");
 
     test.isNotUndefined(trace);
     test.equal(trace.id, "1");
@@ -133,9 +133,9 @@ Tinytest.addAsync(
     AppConfig.env = "production"
 
     var receiver = GetConn();
-    Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.timeline', authKey);
+    Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.admin.timeline', authKey);
     
-    var token = receiver.call('kadira.debug.createAccessToken', authKey);
+    var token = receiver.call('kadira.debug.admin.createAccessToken', authKey);
     test.isNotUndefined(token);
     var tokenKey = authKey + '_' + token;
     test.equal(token, AppConfig.accessToken.get(tokenKey));
