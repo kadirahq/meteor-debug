@@ -14,11 +14,49 @@ function(test) {
 });
 
 Tinytest.add(
-'Server - TraceStore - getTrace (Method)',
+'Server - TraceStore - getTrace (Method) when session has not registered',
 function(test) {
   // build trace first
   // sample data
-  var session = {id: 'sid'};
+  var session = {id: 'siddd'}; // not registred
+  var sampleTrace = {
+    _id: "HvnxHFEBb3YzCT5Tg::sid",
+    _lastEventId: null,
+    at: 1439281811540,
+    errored: false,
+    events: [{0: "start", 1: 0}],
+    id: "bidcid",
+    isEventsProcessed: true,
+    metrics: {
+      compute: 2,
+      db: 3,
+      total: 5,
+      wait: 0
+    },
+    name: "aaa",
+    session: "HvnxHFEBb3YzCT5Tg",
+    type: "method",
+    userId: null
+  };
+
+  traceStore._onMethodTrace(sampleTrace, session);
+
+  // get traces
+  var browserId = 'bid';
+  var clientId = 'cid';
+  var type = 'method';
+  var id = 'bidcid';
+
+  var trace = traceStore.getTrace(browserId, clientId, type, id);
+  test.equal(trace, undefined);
+});
+
+Tinytest.add(
+'Server - TraceStore - getTrace (Method) when session has registered',
+function(test) {
+  // build trace first
+  // sample data
+  var session = {id: 'sid'}; // aready registered in the previous test
   var sampleTrace = {
     _id: "HvnxHFEBb3YzCT5Tg::sid",
     _lastEventId: null,
@@ -61,11 +99,51 @@ function(test) {
 });
 
 Tinytest.add(
-'Server - TraceStore - getTrace (PubSub)',
+'Server - TraceStore - getTrace (PubSub) when session has not regsitered',
 function(test) {
   // build trace first
   // sample data
-  var session = {id: 'sid'};
+  var session = {id: 'sidrtff'}; // session not registered
+
+  var sampleTrace = {
+    _id: "HvnxHFEBb3YzCT5Tg::sid",
+    _lastEventId: null,
+    at: 1439281811540,
+    errored: false,
+    events: [{0: "start", 1: 0}],
+    id: "bidcid",
+    isEventsProcessed: true,
+    metrics: {
+      compute: 2,
+      db: 3,
+      total: 5,
+      wait: 0
+    },
+    name: "aaa",
+    session: "HvnxHFEBb3YzCT5Tg",
+    type: "pubsub",
+    userId: null
+  };
+
+  traceStore._onSubTrace(sampleTrace, session);
+
+  // get trace
+  var browserId = 'bid';
+  var clientId = 'cid';
+  var type = 'pubsub';
+  var id = 'bidcid';
+
+  var trace = traceStore.getTrace(browserId, clientId, type, id);
+
+  test.equal(trace, undefined);
+});
+
+Tinytest.add(
+'Server - TraceStore - getTrace (PubSub) when session has registered',
+function(test) {
+  // build trace first
+  // sample data
+  var session = {id: 'sid'}; // session has already registered
 
   var sampleTrace = {
     _id: "HvnxHFEBb3YzCT5Tg::sid",

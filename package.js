@@ -17,6 +17,8 @@ Package.onUse(function (api) {
 Package.onTest(function(api) {
   configure(api);
   api.use('tinytest');
+  api.use('underscore');
+  api.use('kadira:flow-router');
   api.use('ddp');
   api.use('practicalmeteor:sinon@1.14.1_1');
   
