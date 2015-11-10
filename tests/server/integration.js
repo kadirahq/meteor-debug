@@ -186,11 +186,17 @@ Tinytest.addAsync(
     test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
 
     Meteor.setTimeout(function() {
-      receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
+      var handler = receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
         onReady: function () {
           test.equal(_.size(AppConfig._authorizedSessions.remote), 1);
-          receiver.disconnect();
-          done();
+
+          // delete the code when the publication stops
+          handler.stop();
+          setTimeout(function() {
+            test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+            receiver.disconnect();
+            done();
+          }, 50)
         }
       });
     }, 200);
@@ -341,19 +347,22 @@ Tinytest.addAsync(
     AppConfig.accessTokens.set('aTaT', 'sadas')
 
     var receiver = GetConn();
-    var sender = GetConn();
 
     test.equal(AppConfig.accessTokens.has('aTaT'), true);
     test.equal(_.size(AppConfig._authorizedSessions.client), 0);
 
     Meteor.setTimeout(function() {
-      receiver.subscribe('kadira.debug.client.auth', 'aTaT', {
+      var handler = receiver.subscribe('kadira.debug.client.auth', 'aTaT', {
         onReady: function () {
           test.equal(_.size(AppConfig._authorizedSessions.client), 1);
 
-          sender.disconnect();
-          receiver.disconnect();
-          done();
+          // delete the code when the publication stops
+          handler.stop();
+          setTimeout(function() {
+            test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+            receiver.disconnect();
+            done();
+          }, 50)
         }
       });
     }, 200);
