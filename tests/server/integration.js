@@ -1,7 +1,7 @@
 var LRUCache = Npm.require('lru-cache');
 
 Tinytest.addAsync(
-'Server - Integration - Development - connect and receive timeline updates', 
+'Server - Integration - connect and receive timeline updates', 
 function(test, done) {
   resetAppConfig();
 
@@ -53,7 +53,7 @@ function(test, done) {
 });
 
 Tinytest.addAsync(
-'Server - Integration - Development - remove timeline sub handle after disconnected', 
+'Server - Integration - remove timeline sub handle after disconnected', 
 function(test, done) {
   var receiver = GetConn();
   Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.remote.timeline');
@@ -70,7 +70,7 @@ function(test, done) {
 });
 
 Tinytest.addAsync(
-'Server - Integration - Development - get timeline listner count initially', 
+'Server - Integration - get timeline listner count initially', 
 function(test, done) {
   var timelineReceiver = GetConn();
   var listersCountReceiver = GetConn();
@@ -86,7 +86,7 @@ function(test, done) {
 });
 
 Tinytest.addAsync(
-'Server - Integration - Development - get timeline listner count when add/remove timelines', 
+'Server - Integration - get timeline listner count when add/remove timelines', 
 function(test, done) {
   var timelineReceiver = GetConn();
   var listersCountReceiver = GetConn();
@@ -108,7 +108,7 @@ function(test, done) {
 });
 
 Tinytest.addAsync(
-  'Server - Integration - Development - getTrace',
+  'Server - Integration - getTrace',
   function(test, done) {
     var browserId = 'bid';
     var clientId = 'cid';
@@ -125,7 +125,7 @@ Tinytest.addAsync(
 );
 
 Tinytest.addAsync(
-  'Server - Integration - Production - Authentication based on auth key (remote) : success',
+  'Server - Integration - Access Token Management - create and success',
   function(test, done) {
     resetAppConfig();
 
@@ -133,16 +133,15 @@ Tinytest.addAsync(
     AppConfig.env = 'production';
 
     var receiver = GetConn();
-    var sender = GetConn();
-
-    test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
 
     Meteor.setTimeout(function() {
       receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
         onReady: function () {
-          test.equal(_.size(AppConfig._authorizedSessions.remote), 1);
+          var token = receiver.call('kadira.debug.remote.createAccessToken');
+          token = (token) ? true : false;
 
-          sender.disconnect();
+          test.equal(token, true);
+
           receiver.disconnect();
           done();
         }
@@ -152,7 +151,54 @@ Tinytest.addAsync(
 );
 
 Tinytest.addAsync(
-  'Server - Integration - Production - Authentication based on auth key (remote) : unauthorized',
+  'Server - Integration - Access Token Management - create and failed when invalid auth key',
+  function(test, done) {
+    resetAppConfig();
+
+    AppConfig.authKey = 'authKey';
+    AppConfig.env = 'production';
+
+    var receiver = GetConn();
+    
+    try {
+      var token = receiver.call('kadira.debug.remote.createAccessToken');
+    } catch(err) {
+      var token = false;
+    }
+
+    test.equal(token, false);
+
+    receiver.disconnect();
+    done();
+  }
+);
+
+Tinytest.addAsync(
+  'Server - Integration - Authentication based on authKey - success',
+  function(test, done) {
+    resetAppConfig();
+
+    AppConfig.authKey = 'authKey';
+    AppConfig.env = 'production';
+
+    var receiver = GetConn();
+
+    test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+
+    Meteor.setTimeout(function() {
+      receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
+        onReady: function () {
+          test.equal(_.size(AppConfig._authorizedSessions.remote), 1);
+          receiver.disconnect();
+          done();
+        }
+      });
+    }, 200);
+  }
+);
+
+Tinytest.addAsync(
+  'Server - Integration - Authentication based on authKey - failed',
   function(test, done) {
     resetAppConfig();
 
@@ -179,11 +225,118 @@ Tinytest.addAsync(
 );
 
 Tinytest.addAsync(
-  'Server - Integration - Production - Authentication based on accessToken (client) : success',
+  'Server - Integration - Authorize based on the auth key - on development',
+  function(test, done) {
+    resetAppConfig();
+
+    AppConfig.env = 'development';
+    var authorized = KadiraDebug._authorize('client');
+    test.equal(authorized, true);
+
+    done();
+  }
+);
+
+Tinytest.addAsync(
+  'Server - Integration - Authorize based on the auth key - if the session authorize',
   function(test, done) {
     resetAppConfig();
 
     AppConfig.authKey = 'authKey';
+    AppConfig.env = 'production';
+
+    var receiver = GetConn();
+    var sender = GetConn();
+
+    test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+
+    Meteor.setTimeout(function() {
+      receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
+        onReady: function () {
+          test.equal(_.size(AppConfig._authorizedSessions.remote), 1);
+
+          var authorizedSessions = AppConfig._authorizedSessions.remote;
+          var sessionId = Object.keys(authorizedSessions)[0];
+
+          var authorized = KadiraDebug._authorize('remote', sessionId);
+          test.equal(authorized, true);
+
+          sender.disconnect();
+          receiver.disconnect();
+          done();
+        }
+      });
+    }, 200);
+  }
+);
+
+Tinytest.addAsync(
+  'Server - Integration - Authorize based on the auth key - if not the authorized session',
+  function(test, done) {
+    resetAppConfig();
+
+    AppConfig.authKey = 'authKey';
+    AppConfig.env = 'production';
+
+    var receiver = GetConn();
+    var sender = GetConn();
+
+    test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+
+    Meteor.setTimeout(function() {
+      receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
+        onReady: function () {
+          test.equal(_.size(AppConfig._authorizedSessions.remote), 1);
+
+          var authorizedSessions = AppConfig._authorizedSessions.remote;
+          var sessionId = Object.keys(authorizedSessions)[0];
+
+          try {
+            var authorized = KadiraDebug._authorize('remote', 'fakeId');
+          } catch(err) {
+            var authorized = false;
+          }
+          test.equal(authorized, false);
+
+          sender.disconnect();
+          receiver.disconnect();
+          done();
+        }
+      });
+    }, 200);
+  }
+);
+
+Tinytest.addAsync(
+  'Server - Integration - Authentication based on access token - on development',
+  function(test, done) {
+    resetAppConfig();
+
+    AppConfig.env = 'development';
+
+    var receiver = GetConn();
+
+    Meteor.setTimeout(function() {
+      receiver.subscribe('kadira.debug.client.auth', null, {
+        onReady: function () {
+          // here, just checking the subscription happens without occuring any error 
+          // no _authorizedSessions stores because
+          // all the development app authorized without checking any credentilas
+          test.equal(_.size(AppConfig._authorizedSessions.client), 0);
+
+          receiver.disconnect();
+          done();
+        }
+      });
+    }, 200);
+  }
+);
+
+Tinytest.addAsync(
+  'Server - Integration - Authentication based on access token - success',
+  function(test, done) {
+    resetAppConfig();
+
     AppConfig.env = 'production';
     AppConfig.accessTokens.set('aTaT', 'sadas')
 
@@ -208,11 +361,10 @@ Tinytest.addAsync(
 );
 
 Tinytest.addAsync(
-  'Server - Integration - Production - Authentication based on accessToken (client) : unauthorized',
+  'Server - Integration - Authentication based on access token - failed',
   function(test, done) {
     resetAppConfig();
 
-    AppConfig.authKey = 'authKey';
     AppConfig.env = 'production';
     AppConfig.accessTokens.set('aTaT', 'sadas')
 
@@ -233,55 +385,6 @@ Tinytest.addAsync(
         }
       });
     }, 200);
-  }
-);
-
-Tinytest.addAsync(
-  'Server - Integration - Production - createAccessToken : success',
-  function(test, done) {
-    resetAppConfig();
-
-    AppConfig.authKey = 'authKey';
-    AppConfig.env = 'production';
-
-    var receiver = GetConn();
-
-    Meteor.setTimeout(function() {
-      receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
-        onReady: function () {
-          var token = receiver.call('kadira.debug.remote.createAccessToken');
-          token = (token) ? true : false;
-
-          test.equal(token, true);
-
-          receiver.disconnect();
-          done();
-        }
-      });
-    }, 200);
-  }
-);
-
-Tinytest.addAsync(
-  'Server - Integration - Production - createAccessToken : unauthorized',
-  function(test, done) {
-    resetAppConfig();
-
-    AppConfig.authKey = 'authKey';
-    AppConfig.env = 'production';
-
-    var receiver = GetConn();
-    
-    try {
-      var token = receiver.call('kadira.debug.remote.createAccessToken');
-    } catch(err) {
-      var token = false;
-    }
-
-    test.equal(token, false);
-
-    receiver.disconnect();
-    done();
   }
 );
 

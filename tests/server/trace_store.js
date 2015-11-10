@@ -14,7 +14,7 @@ function(test) {
 });
 
 Tinytest.add(
-'Server - TraceStore - getTrace (Method) when session has not registered',
+'Server - TraceStore - do not track method traces coming from not registered sessions',
 function(test) {
   // build trace first
   // sample data
@@ -52,7 +52,7 @@ function(test) {
 });
 
 Tinytest.add(
-'Server - TraceStore - getTrace (Method) when session has registered',
+'Server - TraceStore - getTrace (Methods)',
 function(test) {
   // build trace first
   // sample data
@@ -99,7 +99,7 @@ function(test) {
 });
 
 Tinytest.add(
-'Server - TraceStore - getTrace (PubSub) when session has not regsitered',
+'Server - TraceStore - do not track pubsub traces coming from not registered sessions',
 function(test) {
   // build trace first
   // sample data
@@ -134,12 +134,11 @@ function(test) {
   var id = 'bidcid';
 
   var trace = traceStore.getTrace(browserId, clientId, type, id);
-
   test.equal(trace, undefined);
 });
 
 Tinytest.add(
-'Server - TraceStore - getTrace (PubSub) when session has registered',
+'Server - TraceStore - getTrace (PubSub)',
 function(test) {
   // build trace first
   // sample data
