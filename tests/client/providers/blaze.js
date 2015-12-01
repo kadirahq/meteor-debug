@@ -229,5 +229,101 @@ function(test, done) {
     stub.stop();
     done();
   });
+});
 
+Tinytest.addAsync(
+'Client - BlazeProvider - withIgnoredKeywords - autorun',
+function(test, done) {
+  var stub = StartStubbing(StoreManager, 'trackActivity');
+  stub.returns(function() {});
+  var that = {view: {name: 'MeteorToys'}};
+
+  var caller = BlazeProvider.autorun(function(cb) {
+    var computation = {firstRun: false};
+    cb(computation);
+  });
+
+  caller.call(that, function() {
+    test.equal(stub.callCount, 0);
+    stub.stop();
+    done();
+  });
+});
+
+Tinytest.addAsync(
+'Client - BlazeProvider - withIgnoredKeywords - events / activity',
+function(test, done) {
+  var eventRef = {};
+  var stub = StartStubbing(StoreManager, 'trackActivity');
+  stub.returns(function() {});
+  var stub2 = StartStubbing(StoreManager, 'trackEvent');
+
+  var caller = BlazeProvider.events(function(eventMap) {
+    eventMap.click(eventRef);
+  });
+
+  var that = {viewName: "MeteorToys"};
+  var eventMap = {
+    "click": function(e) {
+      test.equal(e, eventRef);
+      test.equal(stub.callCount, 0);
+      test.equal(stub2.callCount, 0);
+      stub.stop();
+      stub2.stop();
+      done();
+    }
+  };
+  caller.call(that, eventMap);
+});
+
+Tinytest.addAsync(
+'Client - BlazeProvider - withIgnoredKeywords - _materializeDOM',
+function(test, done) {
+  var htmljs = {};
+  var intoArray = {};
+  var view = {name: "JetSetter"};
+  var that = {};
+  var dom = {};
+
+  var stub = StartStubbing(StoreManager, 'trackActivity');
+  stub.returns(function() {});
+
+  var caller = BlazeProvider._materializeDOM(function(h, i, v) {
+    test.equal(this, that);
+    test.equal(h, htmljs);
+    test.equal(i, intoArray);
+    test.equal(v, view);
+    return dom;
+  });
+
+  var res = caller.call(that, htmljs, intoArray, view);
+  test.equal(res, dom);
+  test.equal(stub.callCount, 0);
+  stub.stop();
+  done();
+});
+
+Tinytest.addAsync(
+'Client - BlazeProvider - withIgnoredKeywords - _destroyNode with a view',
+function(test, done) {
+  var node = {};
+  var that = {};
+  var view = {name: 'Mongol'};
+
+  var stub = StartStubbing(StoreManager, 'trackActivity');
+  stub.returns(function() {});
+
+  var caller = BlazeProvider._destroyNode(function(n) {
+    test.equal(this, that);
+    test.equal(n, node);
+  });
+
+  WithNew(Blaze, {
+    currentView: view
+  }, function() {
+    var res = caller.call(that, node);
+    test.equal(stub.callCount, 0);
+    stub.stop();
+    done();
+  });
 });
