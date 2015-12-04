@@ -296,6 +296,42 @@ function(test, done) {
 });
 
 Tinytest.addAsync(
+'Client - DDPProvider - outgoing - ignoring sub message', 
+function(test, done) {
+  var stub = StartStubbing(StoreManager, 'trackEvent');
+  var stub2 = StartStubbing(StoreManager, 'trackTime');
+
+  var message = {msg: 'sub', id: '1', name: 'MeteorToys'};
+  var caller = DDPProvider._send(function(msg) {
+    test.equal(msg, message);
+    test.equal(DDPProvider.ignoringPubSubIds[message.id], 2);
+    test.equal(stub.callCount, 0);
+    stub.stop();
+    done();
+  });
+
+  caller(message);
+});
+
+Tinytest.addAsync(
+'Client - DDPProvider - outgoing - ignoring sub message with specific keywords', 
+function(test, done) {
+  var stub = StartStubbing(StoreManager, 'trackEvent');
+  var stub2 = StartStubbing(StoreManager, 'trackTime');
+
+  var message = {msg: 'sub', id: '1', name: 'JetSetter'};
+  var caller = DDPProvider._send(function(msg) {
+    test.equal(msg, message);
+    test.equal(DDPProvider.ignoringPubSubIds[message.id], 2);
+    test.equal(stub.callCount, 0);
+    stub.stop();
+    done();
+  });
+
+  caller(message);
+});
+
+Tinytest.addAsync(
 'Client - DDPProvider - outgoing - unsub message', 
 function(test, done) {
   var stub = StartStubbing(StoreManager, 'trackEvent');
@@ -346,6 +382,22 @@ Tinytest.addAsync(
 function(test, done) {
   var stub = StartStubbing(StoreManager, 'trackEvent');
   var message = {msg: 'method', id: Random.id(), method: 'kadira.debug.updateTimeline'};
+  var caller = DDPProvider._send(function(msg) {
+    test.equal(msg, message);
+    test.equal(DDPProvider.ignoringMethodIds[message.id], 2);
+    test.equal(stub.callCount, 0);
+    stub.stop();
+    done();
+  });
+
+  caller(message);
+});
+
+Tinytest.addAsync(
+'Client - DDPProvider - outgoing - ignoring method message with specific keywords', 
+function(test, done) {
+  var stub = StartStubbing(StoreManager, 'trackEvent');
+  var message = {msg: 'method', id: Random.id(), method: 'MeteorToys_JetSetter'};
   var caller = DDPProvider._send(function(msg) {
     test.equal(msg, message);
     test.equal(DDPProvider.ignoringMethodIds[message.id], 2);
