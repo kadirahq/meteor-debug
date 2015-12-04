@@ -172,8 +172,11 @@ Tinytest.addAsync(
 'Store - startup - before start', 
 function(test, done) {
   var s = GetStore();
+  s._isStarted = function() {
+    return false;
+  }
+
   s.startup(done);
-  s.isStarted = null;
   s.start('bid', 'cid');
   s.stop();
 });
@@ -182,7 +185,10 @@ Tinytest.addAsync(
 'Store - startup - after start', 
 function(test, done) {
   var s = GetStore();
-  s.isStarted = null;
+  s._isStarted = function() {
+    return false;
+  }
+  
   s.start('bid', 'cid');
   s.startup(done);
   s.stop();
@@ -261,7 +267,9 @@ function GetStore() {
   // this is just for testing
   s._clientId = 'some-id';
   s.currentDataBlock = s._buildDataBlock();
-  s.isStarted = true;
+  s._isStarted = function() {
+    return true;
+  }
 
   return s;
 }
