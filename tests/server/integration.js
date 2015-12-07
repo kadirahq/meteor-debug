@@ -65,7 +65,7 @@ function(test, done) {
     test.equal(diffCount, 1);
     receiver.disconnect();
     done();
-  });
+  }, 300);
 });
 
 Tinytest.addAsync(
