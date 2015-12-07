@@ -60,12 +60,14 @@ function(test, done) {
   var startTimelineCount = SubHandlers.timeline.length;
   receiver.disconnect();
 
+  Meteor._sleepForMs(300);
+
   Meteor.setTimeout(function() {
     var diffCount =  startTimelineCount - SubHandlers.timeline.length;
     test.equal(diffCount, 1);
     receiver.disconnect();
     done();
-  }, 300);
+  });
 });
 
 Tinytest.addAsync(
