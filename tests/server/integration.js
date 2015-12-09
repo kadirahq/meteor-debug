@@ -25,7 +25,7 @@ function(test, done) {
     var trackInfo = false;
 
     doc.data.times.forEach(function(item) {
-      if(item.type === 'method' && item.id === '1' && item.event === 'server-processed') {
+      if(item.type === 'pubsub' && item.event === 'server-processed') {
         trackedMethodTimes = true;
       }
 
