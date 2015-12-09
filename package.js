@@ -55,6 +55,8 @@ function configure(api) {
   api.use('kadira:runtime-dev');
 
   api.addFiles('lib/server/old_version_removal.js', 'server');
+  
+  api.addFiles('lib/utils.js', ['server', 'client']);
 
   api.addFiles('lib/client/utils.js', 'client');
   api.addFiles('lib/client/store.js', 'client');

@@ -25,8 +25,7 @@ function(test, done) {
     var trackInfo = false;
 
     doc.data.times.forEach(function(item) {
-
-      if(item.type === 'method' && item.id === '1' && item.event === 'server-processed') {
+      if(item.type === 'pubsub' && item.event === 'server-processed') {
         trackedMethodTimes = true;
       }
 
@@ -34,7 +33,7 @@ function(test, done) {
         trackInfo = typeof item.info.name === 'string';
       }
     });
-
+    
     test.isTrue(trackedMethodTimes);
     test.isTrue(trackInfo);
 
@@ -60,6 +59,8 @@ function(test, done) {
 
   var startTimelineCount = SubHandlers.timeline.length;
   receiver.disconnect();
+
+  Meteor._sleepForMs(300);
 
   Meteor.setTimeout(function() {
     var diffCount =  startTimelineCount - SubHandlers.timeline.length;
@@ -129,7 +130,7 @@ Tinytest.addAsync(
   function(test, done) {
     resetAppConfig();
 
-    AppConfig.authKey = 'authKey';
+    AppConfig.authKey = 'authKeyXX';
     AppConfig.env = 'production';
 
     var receiver = GetConn();
@@ -139,7 +140,6 @@ Tinytest.addAsync(
         onReady: function () {
           var token = receiver.call('kadira.debug.remote.createAccessToken');
           token = (token) ? true : false;
-
           test.equal(token, true);
 
           receiver.disconnect();
@@ -183,17 +183,17 @@ Tinytest.addAsync(
 
     var receiver = GetConn();
 
-    test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+    test.equal(_.size(AppConfig.authorizedSessions.remote), 0);
 
     Meteor.setTimeout(function() {
       var handler = receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
         onReady: function () {
-          test.equal(_.size(AppConfig._authorizedSessions.remote), 1);
+          test.equal(_.size(AppConfig.authorizedSessions.remote), 1);
 
           // delete the code when the publication stops
           handler.stop();
           setTimeout(function() {
-            test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+            test.equal(_.size(AppConfig.authorizedSessions.remote), 0);
             receiver.disconnect();
             done();
           }, 50)
@@ -214,12 +214,12 @@ Tinytest.addAsync(
     var receiver = GetConn();
     var sender = GetConn();
 
-    test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+    test.equal(_.size(AppConfig.authorizedSessions.remote), 0);
 
     Meteor.setTimeout(function() {
       receiver.subscribe('kadira.debug.remote.auth', 'fakeKey', {
         onError: function () { 
-          test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+          test.equal(_.size(AppConfig.authorizedSessions.remote), 0);
           
           sender.disconnect();
           receiver.disconnect();
@@ -254,14 +254,14 @@ Tinytest.addAsync(
     var receiver = GetConn();
     var sender = GetConn();
 
-    test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+    test.equal(_.size(AppConfig.authorizedSessions.remote), 0);
 
     Meteor.setTimeout(function() {
       receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
         onReady: function () {
-          test.equal(_.size(AppConfig._authorizedSessions.remote), 1);
+          test.equal(_.size(AppConfig.authorizedSessions.remote), 1);
 
-          var authorizedSessions = AppConfig._authorizedSessions.remote;
+          var authorizedSessions = AppConfig.authorizedSessions.remote;
           var sessionId = Object.keys(authorizedSessions)[0];
 
           var authorized = KadiraDebug._authorize('remote', sessionId);
@@ -287,14 +287,14 @@ Tinytest.addAsync(
     var receiver = GetConn();
     var sender = GetConn();
 
-    test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+    test.equal(_.size(AppConfig.authorizedSessions.remote), 0);
 
     Meteor.setTimeout(function() {
       receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
         onReady: function () {
-          test.equal(_.size(AppConfig._authorizedSessions.remote), 1);
+          test.equal(_.size(AppConfig.authorizedSessions.remote), 1);
 
-          var authorizedSessions = AppConfig._authorizedSessions.remote;
+          var authorizedSessions = AppConfig.authorizedSessions.remote;
           var sessionId = Object.keys(authorizedSessions)[0];
 
           try {
@@ -326,9 +326,9 @@ Tinytest.addAsync(
       receiver.subscribe('kadira.debug.client.auth', null, {
         onReady: function () {
           // here, just checking the subscription happens without occuring any error 
-          // no _authorizedSessions stores because
+          // no authorizedSessions stores because
           // all the development app authorized without checking any credentilas
-          test.equal(_.size(AppConfig._authorizedSessions.client), 0);
+          test.equal(_.size(AppConfig.authorizedSessions.client), 0);
 
           receiver.disconnect();
           done();
@@ -349,17 +349,17 @@ Tinytest.addAsync(
     var receiver = GetConn();
 
     test.equal(AppConfig.accessTokens.has('aTaT'), true);
-    test.equal(_.size(AppConfig._authorizedSessions.client), 0);
+    test.equal(_.size(AppConfig.authorizedSessions.client), 0);
 
     Meteor.setTimeout(function() {
       var handler = receiver.subscribe('kadira.debug.client.auth', 'aTaT', {
         onReady: function () {
-          test.equal(_.size(AppConfig._authorizedSessions.client), 1);
+          test.equal(_.size(AppConfig.authorizedSessions.client), 1);
 
           // delete the code when the publication stops
           handler.stop();
           setTimeout(function() {
-            test.equal(_.size(AppConfig._authorizedSessions.remote), 0);
+            test.equal(_.size(AppConfig.authorizedSessions.remote), 0);
             receiver.disconnect();
             done();
           }, 50)
@@ -381,12 +381,12 @@ Tinytest.addAsync(
     var sender = GetConn();
 
     test.equal(AppConfig.accessTokens.has('aTaT'), true);
-    test.equal(_.size(AppConfig._authorizedSessions.client), 0);
+    test.equal(_.size(AppConfig.authorizedSessions.client), 0);
 
     Meteor.setTimeout(function() {
       receiver.subscribe('kadira.debug.client.auth', 'fakeToken', {
         onError: function () {
-          test.equal(_.size(AppConfig._authorizedSessions.client), 0);
+          test.equal(_.size(AppConfig.authorizedSessions.client), 0);
 
           sender.disconnect();
           receiver.disconnect();
@@ -406,7 +406,7 @@ function resetAppConfig() {
     env: 'development',
     authKey: null,
     accessTokens: new LRUCache({max: 1000}),
-    _authorizedSessions: {
+    authorizedSessions: {
       client: {},
       remote: {}
     }
