@@ -2,8 +2,7 @@ Package.describe({
   summary: 'Full Stack Debugging Solution for Meteor',
   version: '2.2.4',
   git: 'https://github.com/kadirahq/meteor-debug',
-  name: "kadira:debug",
-  debugOnly: true
+  name: "kadira:debug"
 });
 
 Npm.depends({
@@ -18,6 +17,8 @@ Package.onUse(function (api) {
 Package.onTest(function(api) {
   configure(api);
   api.use('tinytest');
+  api.use('underscore');
+  api.use('kadira:flow-router');
   api.use('ddp');
   api.use('practicalmeteor:sinon@1.14.1_1');
   
@@ -30,6 +31,7 @@ Package.onTest(function(api) {
   api.addFiles('tests/client/providers/flow_router.js', 'client');
   api.addFiles('tests/server/integration.js', 'server');
   api.addFiles('tests/server/trace_store.js', 'server');
+  api.addFiles('tests/server/unit.js', 'server');
 });
 
 function configure(api) {
@@ -51,8 +53,11 @@ function configure(api) {
   api.use('meteorhacks:flow-router@0.0.16 || 1.0.0', {weak:true});
   api.use('iron:router@1.0.0', {weak:true});
   api.use('meteorhacks:kadira-debug@1.3.3', {weak: true});
+  api.use('kadira:runtime-dev');
 
   api.addFiles('lib/server/old_version_removal.js', 'server');
+  
+  api.addFiles('lib/utils.js', ['server', 'client']);
 
   api.addFiles('lib/client/utils.js', 'client');
   api.addFiles('lib/client/store.js', 'client');
@@ -66,6 +71,7 @@ function configure(api) {
 
   api.addFiles('lib/client/connect.js', 'client');
 
+  api.addFiles('lib/server/utils.js', 'server');
   api.addFiles('lib/server/trace_store.js', 'server');
   api.addFiles('lib/server/connect.js', 'server');
 }

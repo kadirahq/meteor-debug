@@ -14,11 +14,17 @@ function(test) {
 });
 
 Tinytest.add(
-'Server - TraceStore - getTrace (Method)',
+'Server - TraceStore - getTrace (Methods)',
 function(test) {
+  var sessionId = 'sid';
+  var browserId = 'bid';
+  var clientId = 'cid';
+
+  traceStore.registerSession(sessionId, browserId, clientId);
+
   // build trace first
   // sample data
-  var session = {id: 'sid'};
+  var session = {id: 'sid'}; // aready registered in the previous test
   var sampleTrace = {
     _id: "HvnxHFEBb3YzCT5Tg::sid",
     _lastEventId: null,
@@ -42,8 +48,6 @@ function(test) {
   traceStore._onMethodTrace(sampleTrace, session);
 
   // get traces
-  var browserId = 'bid';
-  var clientId = 'cid';
   var type = 'method';
   var id = 'bidcid';
 
@@ -61,14 +65,60 @@ function(test) {
 });
 
 Tinytest.add(
-'Server - TraceStore - getTrace (PubSub)',
+'Server - TraceStore - do not track method traces coming from not registered sessions',
 function(test) {
+  var sessionId = 'xid';
+  var browserId = 'did';
+  var clientId = 'eid';
+
   // build trace first
   // sample data
-  var session = {id: 'sid'};
+  var session = {id: 'xid'}; // aready registered in the previous test
+  var sampleTrace = {
+    _id: "HvnxHFEBb3YzCT5Tg::xid",
+    _lastEventId: null,
+    at: 1439281811540,
+    errored: false,
+    events: [{0: "start", 1: 0}],
+    id: "bidcid",
+    isEventsProcessed: true,
+    metrics: {
+      compute: 2,
+      db: 3,
+      total: 5,
+      wait: 0
+    },
+    name: "aaa",
+    session: "HvnxHFEBb3YzCT5Tg",
+    type: "method",
+    userId: null
+  };
+
+  traceStore._onMethodTrace(sampleTrace, session);
+
+  // get traces
+  var type = 'method';
+  var id = 'dideid';
+
+  var trace = traceStore.getTrace(browserId, clientId, type, id);
+  test.equal(trace, undefined);
+});
+
+Tinytest.add(
+'Server - TraceStore - getTrace (PubSub)',
+function(test) {
+  var sessionId = 'yid';
+  var browserId = 'bid';
+  var clientId = 'cid';
+
+  traceStore.registerSession(sessionId, browserId, clientId);
+
+  // build trace first
+  // sample data
+  var session = {id: 'yid'};
 
   var sampleTrace = {
-    _id: "HvnxHFEBb3YzCT5Tg::sid",
+    _id: "HvnxHFEBb3YzCT5Tg::yid",
     _lastEventId: null,
     at: 1439281811540,
     errored: false,
@@ -90,8 +140,6 @@ function(test) {
   traceStore._onSubTrace(sampleTrace, session);
 
   // get trace
-  var browserId = 'bid';
-  var clientId = 'cid';
   var type = 'pubsub';
   var id = 'bidcid';
 
@@ -106,6 +154,47 @@ function(test) {
   var expectedTrace = JSON.stringify(expectedTrace);
 
   test.equal(trace, expectedTrace);
+});
+
+Tinytest.add(
+'Server - TraceStore - do not track pubsub traces coming from not registered sessions',
+function(test) {
+  var sessionId = 'zid';
+  var browserId = 'rid';
+  var clientId = 'sid';
+
+  // build trace first
+  // sample data
+  var session = {id: 'zid'};
+
+  var sampleTrace = {
+    _id: "HvnxHFEBb3YzCT5Tg::zid",
+    _lastEventId: null,
+    at: 1439281811540,
+    errored: false,
+    events: [{0: "start", 1: 0}],
+    id: "bidcid",
+    isEventsProcessed: true,
+    metrics: {
+      compute: 2,
+      db: 3,
+      total: 5,
+      wait: 0
+    },
+    name: "aaa",
+    session: "HvnxHFEBb3YzCT5Tg",
+    type: "pubsub",
+    userId: null
+  };
+
+  traceStore._onSubTrace(sampleTrace, session);
+
+  // get trace
+  var type = 'pubsub';
+  var id = 'ridsid';
+
+  var trace = traceStore.getTrace(browserId, clientId, type, id);
+  test.equal(trace, undefined);
 });
 
 Tinytest.add(
