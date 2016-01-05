@@ -1,6 +1,6 @@
 Package.describe({
   summary: 'Full Stack Debugging Solution for Meteor',
-  version: '2.2.4',
+  version: '3.0.0',
   git: 'https://github.com/kadirahq/meteor-debug',
   name: "kadira:debug"
 });
@@ -52,10 +52,7 @@ function configure(api) {
   api.use('meteorhacks:kadira@2.23.2', 'server');
   api.use('meteorhacks:flow-router@0.0.16 || 1.0.0', {weak:true});
   api.use('iron:router@1.0.0', {weak:true});
-  api.use('meteorhacks:kadira-debug@1.3.3', {weak: true});
-  api.use('kadira:runtime-dev');
-
-  api.addFiles('lib/server/old_version_removal.js', 'server');
+  api.use('kadira:runtime-dev@0.0.1');
   
   api.addFiles('lib/utils.js', ['server', 'client']);
 

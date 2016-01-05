@@ -1,5 +1,8 @@
 # Change Log
 
+### v3.0.0
+* Now Kadira Debug works in production as well.
+
 #### v2.2.4
 * Add check package and now it's possible to use this package with Meteor 1.2
 

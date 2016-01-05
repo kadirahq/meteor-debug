@@ -29,6 +29,18 @@ If you'd like to learn more about the Kadira Debug UI and how to interpret it, w
 
 [![](https://cldup.com/eDEvWF2VMT.png)](https://www.youtube.com/watch?v=lrAYlayAWMI)
 
+### Using With Production Apps
+
+You can even debug your production Meteor app with Kadira Debug. For that, you need to use Kadira Debug version 3.0 or a later version.
+
+In order to allow secure communication, you need to configure your app with a key when you are deploying your app. [Click here](http://support.kadira.io/knowledgebase/articles/808611-configuring-kadira-debug-for-production-app) to learn more about it.
+
+After that, you can use Kadira Debug to debug your app and **share** your debugging session with your teammates. 
+
+> It's very easy to share your Kadira Debug session, just ask them to connect to your app using Kadira Debug. Then they can see all the active debug sessions.
+>
+> **Note:** Sharing works with production apps only.
+
 ## FAQ
 
 #### How does it work?
@@ -41,7 +53,7 @@ Not necessarily. Kadira Debug collects, aggregates and sends data in an effectiv
 
 #### Is it secure?
 
-Kadira Debug is a `debugOnly` package. It will **_not_** go into the production build. It also does not send or route data outside of your machine. Kadira Debug UI directly connects to your app via DDP. No proxies. No hacks.
+Kadira Debug simply connects to your app and get information and display it to you. In production, it's protected with a secret key. In production mode, we suggest you to use Kadira Debug only with SSL enabled apps.
 
 #### Why isn't it HTTPS?
 
@@ -57,17 +69,22 @@ Yes and No. Checkout this repo. It's the core of Kadira Debug and how we collect
 
 #### Is it FREE?
 
-Yes, it is. We'll never block/restrict any debug-related features. But, we'll add a few value-added services like sharing and remote debugging.
+Yes, it is. We'll never block/restrict any debug-related features. But, we'll add a few value-added services.
 
 #### What if I don't have a Kadira Account?
+
 You don't need to have a Kadira or Meteor Account to use Kadira Debug. But, you should try to create an account :)
 
-#### Does it work with Nitrous.io or in the cloud?
-Yes, it does. In "Nitrous.io", your app runs as a dev app. So, it'll work. Just enter the app URL. Likewise, it'll work with any other cloud development environment. Additionally, Kadira Debug also works if you deploy your app with the debug mode (`--debug`).
+#### Does it work with Nitrous.io or in the cloud development environments?
+Yes, it does. In "Nitrous.io", your app runs as a dev app. So, it'll work. Just enter the app URL.
+
+#### Does it work with production apps?
+
+Yes it is. Check the [above](#using-with-production-apps) documentation for more information.
 
 #### Will it support React?
 
-React is becoming the standard for UI components. Meteor is supporting it officially soon. So, it'd be a shame if we wouldn't support it.
+Soon.
 
 #### I have a different question
 
