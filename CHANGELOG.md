@@ -1,5 +1,8 @@
 # Change Log
 
+### v3.0.1
+* Remove cosmos:browserify since we are not using any npm modules in client.
+
 ### v3.0.0
 * Now Kadira Debug works in production as well.
 
