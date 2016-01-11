@@ -1,4 +1,4 @@
-var traceStore = new TraceStore({serverId: 1});
+var traceStore = new TraceStore({kdData: KdData});
 traceStore.start();
 
 Tinytest.add(
