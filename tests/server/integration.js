@@ -54,6 +54,8 @@ function(test, done) {
 Tinytest.addAsync(
 'Server - Integration - remove timeline sub handle after disconnected', 
 function(test, done) {
+  resetAppConfig();
+
   var receiver = GetConn();
   Meteor.wrapAsync(receiver.subscribe, receiver)('kadira.debug.remote.timeline');
 
@@ -73,6 +75,8 @@ function(test, done) {
 Tinytest.addAsync(
 'Server - Integration - get timeline listner count initially', 
 function(test, done) {
+  resetAppConfig()
+
   var timelineReceiver = GetConn();
   var listersCountReceiver = GetConn();
   Meteor.wrapAsync(timelineReceiver.subscribe, timelineReceiver)('kadira.debug.remote.timeline');
@@ -89,6 +93,8 @@ function(test, done) {
 Tinytest.addAsync(
 'Server - Integration - get timeline listner count when add/remove timelines', 
 function(test, done) {
+  resetAppConfig()
+
   var timelineReceiver = GetConn();
   var listersCountReceiver = GetConn();
   Meteor.wrapAsync(timelineReceiver.subscribe, timelineReceiver)('kadira.debug.remote.timeline');
@@ -111,6 +117,8 @@ function(test, done) {
 Tinytest.addAsync(
   'Server - Integration - getTrace',
   function(test, done) {
+    resetAppConfig()
+
     var browserId = 'bid';
     var clientId = 'cid';
 
