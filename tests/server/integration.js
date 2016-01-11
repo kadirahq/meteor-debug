@@ -142,8 +142,8 @@ Tinytest.addAsync(
           token = (token) ? true : false;
           test.equal(token, true);
 
-          var doc = KdData.configColl.findOne({_id: 'accessTokens'});
-          test.equal(doc.tokens.length, 1);
+          var docCount = KdData.configColl.find({type: 'accessTokens'}).count();
+          test.equal(docCount, 1);
 
           receiver.disconnect();
           done();
@@ -171,7 +171,7 @@ Tinytest.addAsync(
 
     test.equal(token, false);
 
-    var count = KdData.configColl.find({_id: 'accessTokens'}).count();
+    var count = KdData.configColl.find({type: 'accessTokens'}).count();
     test.equal(count, 0);
 
     receiver.disconnect();
@@ -189,21 +189,21 @@ Tinytest.addAsync(
 
     var receiver = GetConn();
 
-    var count = KdData.configColl.find({_id: 'remoteAuthorizedSessions'}).count();
+    var count = KdData.configColl.find({type: 'remoteAuthorizedSessions'}).count();
     test.equal(count, 0);
 
     Meteor.setTimeout(function() {
       var handler = receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
         onReady: function () {
-          var authSessionsDoc = KdData.configColl.findOne({_id: 'remoteAuthorizedSessions'});
-          test.equal(authSessionsDoc.sessions.length, 1);
+          var docCount = KdData.configColl.find({type: 'remoteAuthorizedSessions'}).count();
+          test.equal(docCount, 1);
 
           // delete the code when the publication stops
           handler.stop();
           Meteor._sleepForMs(100);
 
-          var authSessionsDoc = KdData.configColl.findOne({_id: 'remoteAuthorizedSessions'});
-          test.equal(authSessionsDoc.sessions.length, 0);
+          var docCount = KdData.configColl.find({type: 'remoteAuthorizedSessions'}).count();
+          test.equal(docCount, 0);
 
           receiver.disconnect();
           done();
@@ -224,13 +224,13 @@ Tinytest.addAsync(
     var receiver = GetConn();
     var sender = GetConn();
 
-    var count = KdData.configColl.find({_id: 'remoteAuthorizedSessions'}).count();
+    var count = KdData.configColl.find({type: 'remoteAuthorizedSessions'}).count();
     test.equal(count, 0);
 
     Meteor.setTimeout(function() {
       receiver.subscribe('kadira.debug.remote.auth', 'fakeKey', {
         onError: function () { 
-          var count = KdData.configColl.find({_id: 'remoteAuthorizedSessions'}).count();
+          var count = KdData.configColl.find({type: 'remoteAuthorizedSessions'}).count();
           test.equal(count, 0);
           
           sender.disconnect();
@@ -266,17 +266,17 @@ Tinytest.addAsync(
     var receiver = GetConn();
     var sender = GetConn();
 
-    var count = KdData.configColl.find({_id: 'remoteAuthorizedSessions'}).count();
+    var count = KdData.configColl.find({type: 'remoteAuthorizedSessions'}).count();
     test.equal(count, 0);
 
     Meteor.setTimeout(function() {
       receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
         onReady: function () {
-          var authSessionsDoc = KdData.configColl.findOne({_id: 'remoteAuthorizedSessions'});
-          test.equal(authSessionsDoc.sessions.length, 1);
+          var docCount = KdData.configColl.find({type: 'remoteAuthorizedSessions'}).count();
+          test.equal(docCount, 1);
 
-          var authSessionsDoc = KdData.configColl.findOne({_id: 'remoteAuthorizedSessions'});
-          var sessionId = authSessionsDoc.sessions[0];
+          var authSessionsDoc = KdData.configColl.findOne({type: 'remoteAuthorizedSessions'});
+          var sessionId = authSessionsDoc.session;
           var authorized = KadiraDebug._authorize('remote', sessionId);
           test.equal(authorized, true);
 
@@ -303,11 +303,11 @@ Tinytest.addAsync(
     Meteor.setTimeout(function() {
       receiver.subscribe('kadira.debug.remote.auth', AppConfig.authKey, {
         onReady: function () {
-          var authSessionsDoc = KdData.configColl.findOne({_id: 'remoteAuthorizedSessions'});
-          test.equal(authSessionsDoc.sessions.length, 1);
+          var docCount = KdData.configColl.find({type: 'remoteAuthorizedSessions'}).count();
+          test.equal(docCount, 1);
 
-          var authSessionsDoc = KdData.configColl.findOne({_id: 'remoteAuthorizedSessions'});
-          var sessionId = authSessionsDoc.sessions[0];
+          var authSessionsDoc = KdData.configColl.findOne({type: 'remoteAuthorizedSessions'});
+          var sessionId = authSessionsDoc.session;
 
           try {
             var authorized = KadiraDebug._authorize('remote', 'fakeId');
@@ -340,8 +340,8 @@ Tinytest.addAsync(
           // here, just checking the subscription happens without occuring any error 
           // no authorizedSessions stores because
           // all the development app authorized without checking any credentilas
-          var count = KdData.configColl.find({_id: 'clientAuthorizedSessions'}).count();
-          test.equal(count, 0);
+          var docCount = KdData.configColl.find({type: 'clientAuthorizedSessions'}).count();
+          test.equal(docCount, 0);
 
           receiver.disconnect();
           done();
@@ -357,32 +357,32 @@ Tinytest.addAsync(
     resetAppConfig();
 
     AppConfig.env = 'production';
-    KdData.configColl.update(
-      { _id: 'accessTokens' }, 
-      { $addToSet: {tokens: 'aTaT'} },
-      { upsert: true }
-    );
+
+    KdData.configColl.insert({
+      type: 'accessTokens', 
+      token: 'aTaT'
+    });
 
     var receiver = GetConn();
 
-    var tokensDoc = KdData.configColl.findOne({_id: 'accessTokens'});
-    test.equal(tokensDoc.tokens.length, 1);
+    var docCount = KdData.configColl.find({type: 'accessTokens'}).count();
+    test.equal(docCount, 1);
 
-    var count = KdData.configColl.find({_id: 'clientAuthorizedSessions'}).count();
-    test.equal(count, 0);
+    var docCount = KdData.configColl.find({type: 'clientAuthorizedSessions'}).count();
+    test.equal(docCount, 0);
 
     Meteor.setTimeout(function() {
       var handler = receiver.subscribe('kadira.debug.client.auth', 'aTaT', {
         onReady: function () {
-          var authSessionsDoc = KdData.configColl.findOne({_id: 'clientAuthorizedSessions'});
-          test.equal(authSessionsDoc.sessions.length, 1);
+          var docCount = KdData.configColl.find({type: 'clientAuthorizedSessions'}).count();
+          test.equal(docCount, 1);
 
           // delete the code when the publication stops
           handler.stop();
           Meteor._sleepForMs(100);
 
-          var authSessionsDoc = KdData.configColl.findOne({_id: 'clientAuthorizedSessions'});
-          test.equal(authSessionsDoc.sessions.length, 0);
+          var docCount = KdData.configColl.find({type: 'clientAuthorizedSessions'}).count();
+          test.equal(docCount, 0);
 
           receiver.disconnect();
           done();
@@ -398,17 +398,17 @@ Tinytest.addAsync(
     resetAppConfig();
 
     AppConfig.env = 'production';
-    KdData.configColl.update(
-      { _id: 'accessTokens' }, 
-      { $addToSet: {tokens: 'aTaT'} },
-      { upsert: true }
-    );
 
-    var tokensDoc = KdData.configColl.findOne({_id: 'accessTokens'});
-    test.equal(tokensDoc.tokens.length, 1);
+    KdData.configColl.insert({
+      type: 'accessTokens' , 
+      token: 'aTaT'
+    });
 
-    var count = KdData.configColl.find({_id: 'clientAuthorizedSessions'}).count();
-    test.equal(count, 0);
+    var docCount = KdData.configColl.find({type: 'accessTokens'}).count();
+    test.equal(docCount, 1);
+
+    var docCount = KdData.configColl.find({type: 'clientAuthorizedSessions'}).count();
+    test.equal(docCount, 0);
 
     var receiver = GetConn();
     var sender = GetConn();
@@ -416,8 +416,8 @@ Tinytest.addAsync(
     Meteor.setTimeout(function() {
       receiver.subscribe('kadira.debug.client.auth', 'fakeToken', {
         onError: function () {
-          var count = KdData.configColl.find({_id: 'clientAuthorizedSessions'}).count();
-          test.equal(count, 0);
+          var docCount = KdData.configColl.find({type: 'clientAuthorizedSessions'}).count();
+          test.equal(docCount, 0);
 
           sender.disconnect();
           receiver.disconnect();
@@ -438,7 +438,5 @@ function resetAppConfig() {
     authKey: null
   };
 
-  KdData.configColl.remove({_id: 'accessTokens'});
-  KdData.configColl.remove({_id: 'remoteAuthorizedSessions'});
-  KdData.configColl.remove({_id: 'clientAuthorizedSessions'});
+  KdData.configColl.remove({});
 }
