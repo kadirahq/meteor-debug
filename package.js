@@ -69,6 +69,7 @@ function configure(api) {
   api.addFiles('lib/client/connect.js', 'client');
 
   api.addFiles('lib/server/utils.js', 'server');
+  api.addFiles('lib/server/data.js', 'server');
   api.addFiles('lib/server/trace_store.js', 'server');
   api.addFiles('lib/server/connect.js', 'server');
 }
