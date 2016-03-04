@@ -1,5 +1,11 @@
 # Change Log
 
+### v3.1.0
+04-March-2016
+
+* Remove blaze activity tracking.
+* Correctly use performance.now()
+
 ### v3.0.1
 * Remove cosmos:browserify since we are not using any npm modules in client.
 
@@ -55,7 +61,7 @@
 #### v1.0.1
 
 * Fix a potential rendering issue. See [#1](https://github.com/meteorhacks/kadira-debug/issues/1)
-* Template event's event get tracked before the activity. That makes the 
+* Template event's event get tracked before the activity. That makes the
 
 #### v1.0.0
 
