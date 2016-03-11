@@ -1,5 +1,10 @@
 # Change Log
 
+### v3.1.1
+11-March-2016
+
+* Track routes for kadira:flow-router. Earlier, it was meteorhacks:flow-router.
+
 ### v3.1.0
 04-March-2016
 
