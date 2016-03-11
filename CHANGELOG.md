@@ -1,5 +1,10 @@
 # Change Log
 
+### v3.2.0
+11-March-2016
+
+* Save traces and events inside a Mongo capped collection. This helps us to work with multi-host apps and remote debugging.
+
 ### v3.1.1
 11-March-2016
 
