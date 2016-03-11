@@ -1,4 +1,4 @@
-var traceStore = new TraceStore();
+var traceStore = new TraceStore({kdData: KdData});
 traceStore.start();
 
 Tinytest.add(
@@ -53,7 +53,7 @@ function(test) {
 
   // expected trace
   var expectedTrace = sampleTrace;
-  expectedTrace.startTime = new Date();
+  expectedTrace.startTime = new Date(1439281811540);
   expectedTrace.totalValue = 5;
 
   var trace = traceStore.getTrace(browserId, clientId, type, id);
@@ -145,7 +145,7 @@ function(test) {
 
   // expected trace
   var expectedTrace = sampleTrace;
-  expectedTrace.startTime = new Date();
+  expectedTrace.startTime = new Date(1439281811540);
   expectedTrace.totalValue = 5;
 
   var trace = traceStore.getTrace(browserId, clientId, type, id);
@@ -260,7 +260,7 @@ function(test) {
   var id = Random.id();
   var event = "server-received";
 
-  var s = new TraceStore();
+  var s = new TraceStore({serverId: 1});
   s._trackTime(type, sessionId, id, event);
   
   var savedItems = s._timeEventsCache.get(sessionId);
@@ -282,7 +282,7 @@ function(test) {
   var event = "server-received";
   var info = {name: "aa-10"};
 
-  var s = new TraceStore();
+  var s = new TraceStore({serverId: 1});
   s._trackTime(type, sessionId, id, event, info);
   
   var savedItems = s._timeEventsCache.get(sessionId);
@@ -304,7 +304,7 @@ function(test) {
   var id = Random.id();
   var event = "server-received";
 
-  var s = new TraceStore();
+  var s = new TraceStore({serverId: 1});
   s._trackTime(type, sessionId, id, event);
   s._trackTime(type, sessionId, id, event);
   
@@ -332,7 +332,7 @@ function(test) {
   var id = Random.id();
   var event = "server-received";
 
-  var s = new TraceStore();
+  var s = new TraceStore({serverId: 1});
   s.registerSession(sessionId, browserId, clientId);
 
   var expectedItem = {
