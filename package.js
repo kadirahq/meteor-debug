@@ -1,6 +1,6 @@
 Package.describe({
   summary: 'Full Stack Debugging Solution for Meteor',
-  version: '3.0.0',
+  version: '3.1.1',
   git: 'https://github.com/kadirahq/meteor-debug',
   name: "kadira:debug"
 });
@@ -21,9 +21,9 @@ Package.onTest(function(api) {
   api.use('kadira:flow-router');
   api.use('ddp');
   api.use('practicalmeteor:sinon@1.14.1_1');
-  
+
   api.addFiles('tests/utils.js', ['server', 'client']);
-  
+
   api.addFiles('tests/client/store.js', 'client');
   api.addFiles('tests/client/providers/blaze.js', 'client');
   api.addFiles('tests/client/providers/ddp.js', 'client');
@@ -48,12 +48,11 @@ function configure(api) {
   api.use('mongo');
   api.use('tracker');
   api.use('localstorage');
-  api.use('cosmos:browserify@0.4.0');
   api.use('meteorhacks:kadira@2.23.2', 'server');
   api.use('meteorhacks:flow-router@0.0.16 || 1.0.0', {weak:true});
   api.use('iron:router@1.0.0', {weak:true});
   api.use('kadira:runtime-dev@0.0.1');
-  
+
   api.addFiles('lib/utils.js', ['server', 'client']);
 
   api.addFiles('lib/client/utils.js', 'client');
