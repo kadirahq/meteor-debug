@@ -1,5 +1,10 @@
 # Change Log
 
+### v3.2.1
+15-March-2016
+
+* Add proper FlowRouter support. Earlier it was not depended weakly. Now we've added support for flow-router-ssr as well.
+
 ### v3.2.0
 11-March-2016
 
