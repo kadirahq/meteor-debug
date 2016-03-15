@@ -1,8 +1,8 @@
-# Kadira Debug [![Build Status](https://travis-ci.org/kadirahq/meteor-debug.svg?branch=master)](https://travis-ci.org/kadirahq/meteor-debug)
+# Kadira Debug
 
 Full Stack Debugging Solution for Meteor
 
-![Kadira Debug - Full Stack Debugging Solution for Meteor](https://cldup.com/pQDQPc4rjT.png)
+![Kadira Debug - Full Stack Debugging Solution for Meteor](https://cldup.com/8qVDtF7NtP.png)
 
 Kadira Debug **helps** you to identify what's happening behind your Meteor app including both **client** and the **server** code. Based on that information, you can **improve** the performance of your app and make it **faster**.
 
@@ -15,7 +15,6 @@ First add following package to your app:
 ~~~js
 meteor add kadira:debug
 ~~~
-
 
 * Then run your app. (Let's assume your app runs on port 3000)
 * After that, visit <http://debug.kadiraio.com/debug>
@@ -35,17 +34,15 @@ You can even debug your production Meteor app with Kadira Debug. For that, you n
 
 In order to allow secure communication, you need to configure your app with a key when you are deploying your app. [Click here](http://support.kadira.io/knowledgebase/articles/808611-configuring-kadira-debug-for-production-app) to learn more about it.
 
-After that, you can use Kadira Debug to debug your app and **share** your debugging session with your teammates. 
+After that, you can use Kadira Debug to debug your app and **share** your debugging session with your teammates.
 
-> It's very easy to share your Kadira Debug session, just ask them to connect to your app using Kadira Debug. Then they can see all the active debug sessions.
->
 > **Note:** Sharing works with production apps only.
 
 ## FAQ
 
 #### How does it work?
 
-Kadira Debug UI directly connects to your locally running app via DDP. Then it can collect data from both your server and the browser and display it in a nice interface. If you'd like to learn more, why don't you hack this repo? :)
+Kadira Debug UI directly connects to your app via DDP. Then it can collect data from both your server and the browser and display it in the [Kadira Debug management console](http://debug.kadiraio.com/debug). If you'd like to learn more, why don't you hack this repo? :)
 
 #### Does it affect the performance of my app?
 
@@ -55,32 +52,32 @@ Not necessarily. Kadira Debug collects, aggregates and sends data in an effectiv
 
 Kadira Debug simply connects to your app and get information and display it to you. In production, it's protected with a secret key. In production mode, we suggest you to use Kadira Debug only with SSL enabled apps.
 
-#### Why isn't it HTTPS?
+#### Why isn't management console using HTTPS?
 
-Did you notice we're using a different domain for Kadira Debug? Here it is: `http://debug.kadiraio.com/debug`. That's because of a security feature of modern browsers. 
+Did you notice we're using a different domain for Kadira Debug management console? Here it is: `http://debug.kadiraio.com/debug`. That's because of a security feature of modern browsers.
 
 Browsers restrict HTTPS web pages from accessing non-HTTPS content. So, if we serve Kadira Debug on a `*.kadira.io` domain with HTTPS, we can't connect to localhost. That's why we're using a separate domain without HTTPS.
 
-**This is secure since we don't communicate with Kadira Servers inside Kadira Debug. Even if we do, we'll use some other techniques to make sure the DDP connection is always secure.**
+**For your production app, we'll open a HTTPS DDP connection for actual data communication.**
+
+#### It seems like Kadira can access all my data. Isn't it?
+
+Nope. Kadira Debug data is stored on two small capped collections (50mb each) in your MongoDB database, and these data won't be sent to Kadira for any reason. Kadira Debug management console simply connects to your app using DDP so that you can access that data.
+(Kadira Debug management console is a 100% client-side app.)
+
+So, your data remain with your app and Kadira can't see any of it. You can take a look at thus Meteor package for more information.
 
 #### Is it Open Source?
 
 Yes and No. Checkout this repo. It's the core of Kadira Debug and how we collect data. It's open source under MIT. But, our Kadira Debug UI is not open source.
-
-#### Is it FREE?
-
-Yes, it is. We'll never block/restrict any debug-related features. But, we'll add a few value-added services.
 
 #### What if I don't have a Kadira Account?
 
 You don't need to have a Kadira or Meteor Account to use Kadira Debug. But, you should try to create an account :)
 
 #### Does it work with Nitrous.io or in the cloud development environments?
+
 Yes, it does. In "Nitrous.io", your app runs as a dev app. So, it'll work. Just enter the app URL.
-
-#### Does it work with production apps?
-
-Yes it is. Check the [above](#using-with-production-apps) documentation for more information.
 
 #### Will it support React?
 
