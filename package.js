@@ -18,7 +18,6 @@ Package.onTest(function(api) {
   configure(api);
   api.use('tinytest');
   api.use('underscore');
-  api.use('kadira:flow-router');
   api.use('ddp');
   api.use('practicalmeteor:sinon@1.14.1_1');
 
@@ -49,7 +48,8 @@ function configure(api) {
   api.use('tracker');
   api.use('localstorage');
   api.use('meteorhacks:kadira@2.23.2', 'server');
-  api.use('meteorhacks:flow-router@0.0.16 || 1.0.0', {weak:true});
+  api.use('kadira:flow-router@2.0.0', {weak:true});
+  api.use('kadira:flow-router-ssr@3.0.0', {weak:true});
   api.use('iron:router@1.0.0', {weak:true});
   api.use('kadira:runtime-dev@0.0.1');
 
