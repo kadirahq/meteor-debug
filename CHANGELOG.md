@@ -1,5 +1,10 @@
 # Change Log
 
+### v3.2.2
+23-March-2016
+
+* Only add Blaze related stuff (only event tracking), if only blaze exists in the project.
+
 ### v3.2.1
 15-March-2016
 
