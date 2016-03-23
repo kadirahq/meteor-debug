@@ -18,6 +18,7 @@ Package.onTest(function(api) {
   configure(api);
   api.use('tinytest');
   api.use('underscore');
+  api.use('templating');
   api.use('ddp');
   api.use('practicalmeteor:sinon@1.14.1_1');
 
@@ -37,8 +38,7 @@ function configure(api) {
   api.export(['KadiraDebug']);
 
   api.versionsFrom('1.0');
-  api.use('blaze');
-  api.use('templating');
+  api.use('templating', {weak: true});
   api.use('underscore');
   api.use('random');
   api.use('check');
